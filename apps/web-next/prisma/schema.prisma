@@ -1,18 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-
-model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  author    String?
-  createdAt DateTime @default(now())
 }
 
 // 小程序用户模型
@@ -38,4 +31,22 @@ model User {
   lastLoginAt DateTime @default(now())
   
   @@map("users")
+}
+// 分类模型
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique // 分类名称
+  parentId  Int?     // 父分类ID
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+// 好评记录
+model GoodComment {
+  id        Int      @id @default(autoincrement())
+  userId    String   @default(cuid()) // 用户ID
+  commentId Int      @default(autoincrement()) // 评论ID
+  category   String   @default("good") // 好评类型
+  content   String  // 内容
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
