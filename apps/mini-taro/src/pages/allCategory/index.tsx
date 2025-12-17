@@ -1,6 +1,8 @@
 import { FC, useMemo, useState } from 'react'
 import { View, Text, Input, Button } from '@tarojs/components'
 import './index.scss'
+import { useDidShow } from '@tarojs/taro'
+import { get } from '@/utils/request'
 
 const PARENTS = [
   { key: 'food', label: '美食' },
@@ -40,7 +42,9 @@ const AllCategory: FC = () => {
     const q = search.trim().toLowerCase()
     return q ? list.filter(x => x.toLowerCase().includes(q)) : list
   }, [parent, search])
-
+useDidShow(() => {
+  get('/category')
+})
   return (
     <View className='all-category-page'>
       {/* 搜索框 */}

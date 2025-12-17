@@ -1,11 +1,11 @@
-import jwt from 'jsonwebtoken';
-import { NextRequest } from 'next/server';
-import { ResponseCode, ResponseMessage, ResponseUtil, createJsonResponse } from '../lib/response';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken'
+import { NextRequest } from 'next/server'
+import { ResponseCode, ResponseMessage } from './response'
+const JWT_SECRET = (process.env.JWT_SECRET || 'your-jwt-secret-key') as Secret;
 
 export interface JWTPayload {
     userId: string
     openId: string
-    nickName: string
     iat: number
     exp: number
 }
@@ -14,81 +14,95 @@ export interface AuthenticatedRequest extends NextRequest {
     user?: JWTPayload
 }
 
-export interface AuthOptions {
-    allowGuest?: boolean;
-    tokenSources?: Array<'header' | 'cookie' | 'query'>;
-}
-
-// jwt 中间件
-export async function withAuth(
-    handler: (request: AuthenticatedRequest) => Promise<Response>,
-    options: AuthOptions = { allowGuest: false, tokenSources: ['header', 'cookie'] }
-) {
+// JWT验证中间件
+export async function withAuth(handler: (request: AuthenticatedRequest) => Promise<Response>) {
     return async (request: NextRequest) => {
-        if (request.method === 'OPTIONS') {
-            return createJsonResponse(ResponseUtil.success(null), { status: 204 })
-        }
-
-        const { user, error } = verifyToken(request, options.tokenSources)
+        const user = await verifyToken(request)
 
         if (!user) {
-            const isExpired = error === 'TOKEN_EXPIRED'
-            const code = isExpired ? ResponseCode.TOKEN_EXPIRED : ResponseCode.UNAUTHORIZED
-            const message = isExpired ? ResponseMessage.TOKEN_EXPIRED : ResponseMessage.UNAUTHORIZED
-
-            if (options.allowGuest) {
-                const authenticatedRequest = request as AuthenticatedRequest
-                authenticatedRequest.user = undefined
-                return await handler(authenticatedRequest)
-            }
-
-            return createJsonResponse(ResponseUtil.error(message, code), { status: 401 })
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: ResponseMessage.UNAUTHORIZED,
+                    code: ResponseCode.UNAUTHORIZED
+                }),
+                {
+                    status: 401,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
         }
 
+        // 将用户信息附加到请求对象
         const authenticatedRequest = request as AuthenticatedRequest
         authenticatedRequest.user = user
+
         return await handler(authenticatedRequest)
     }
 }
 
-function extractToken(req: NextRequest, sources: Array<'header' | 'cookie' | 'query'> = ['header', 'cookie']) {
-    for (const src of sources) {
-        if (src === 'header') {
-            const authHeader = req.headers.get('authorization') || req.headers.get('Authorization')
-            if (authHeader && authHeader.startsWith('Bearer ')) {
-                return authHeader.substring(7)
+// 验证JWT token
+export async function verifyToken(requestOrToken: NextRequest | string): Promise<JWTPayload | null> {
+    try {
+        let token: string | null = null
+
+        // 优先：直接字符串
+        if (typeof requestOrToken === 'string') {
+            token = requestOrToken
+        } else {
+            // 请求对象：从 Authorization 或 Cookie 获取
+            const authHeader = requestOrToken.headers.get('authorization') || ''
+            if (/^Bearer\s+/i.test(authHeader)) {
+                token = authHeader.replace(/^Bearer\s+/i, '')
+            }
+            if (!token) {
+                const cookieToken = requestOrToken.cookies?.get?.('token')?.value
+                if (cookieToken) token = cookieToken
             }
         }
-        if (src === 'cookie') {
-            const cookieToken = req.cookies.get('token')?.value
-            if (cookieToken) return cookieToken
+
+        if (!token || typeof token !== 'string' || token.trim() === '') {
+            return null
         }
-        if (src === 'query') {
-            const urlToken = req.nextUrl.searchParams.get('token')
-            if (urlToken) return urlToken
-        }
+
+        // 验证token
+        const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload
+
+        // 只进行token验证，不额外查询数据库，减少性能开销
+        return decoded
+
+    } catch (error) {
+        console.error('Token验证失败:', error)
+        return null
     }
-    return null
 }
 
-function verifyToken(req: NextRequest, sources: Array<'header' | 'cookie' | 'query'> = ['header', 'cookie']) {
-    const token = extractToken(req, sources)
-    if (!token) {
-        return { user: undefined, error: 'MISSING_AUTH' as const }
+// 生成新的token
+export function generateToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
+    const options: SignOptions = {
+        expiresIn: '15d'
     }
+    return jwt.sign(
+        { ...payload, iat: Math.floor(Date.now() / 1000) },
+        JWT_SECRET,
+        options
+    )
+}
 
-    const secret = process.env.JWT_SECRET
-    if (!secret) {
-        return { user: undefined, error: 'NO_SECRET' as const }
-    }
-
+// 刷新token
+export function refreshToken(oldToken: string): string | null {
     try {
-        const decoded = jwt.verify(token, secret) as JWTPayload
-        return { user: decoded, error: undefined }
-    } catch (err: any) {
-        if (err?.name === 'TokenExpiredError') {
-            return { user: undefined, error: 'TOKEN_EXPIRED' as const }
-        }
-        return { user: undefined, error: 'INVALID_TOKEN' as const }
+        const decoded = jwt.verify(oldToken, JWT_SECRET) as JWTPayload
+
+        // 生成新token
+        return generateToken({
+            userId: decoded.userId,
+            openId: decoded.openId
+        })
+
+    } catch {
+        return null
     }
 }

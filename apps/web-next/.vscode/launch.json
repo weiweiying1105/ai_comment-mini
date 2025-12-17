@@ -1,0 +1,29 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "web-next: Next.js dev",
+            "cwd": "${workspaceFolder}/apps/web-next",
+            "program": "${workspaceFolder}/apps/web-next/node_modules/next/dist/bin/next",
+            "args": ["dev", "-p", "3000"],
+            "runtimeArgs": ["--inspect=9229"],
+            "envFile": "${workspaceFolder}/apps/web-next/.env",
+            "skipFiles": ["<node_internals>/**"],
+            "console": "integratedTerminal",
+            "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Next dev (9229)",
+            "port": 9229,
+            "cwd": "${workspaceFolder}/apps/web-next",
+            "skipFiles": ["<node_internals>/**"]
+        }
+    ]
+}
