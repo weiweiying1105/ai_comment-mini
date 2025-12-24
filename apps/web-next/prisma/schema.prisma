@@ -39,6 +39,7 @@ model Category {
   parentId  Int?     // 父分类ID
   keyword   String?  // 关键词
   icon      String?  // 图标
+  active_icon String?  // 活动图标
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   

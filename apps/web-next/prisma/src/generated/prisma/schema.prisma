@@ -35,13 +35,14 @@ model User {
 
 // 分类模型
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique // 分类名称
-  parentId  Int? // 父分类ID
-  keyword   String? // 关键词
-  icon      String? // 图标
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // 分类名称
+  parentId    Int? // 父分类ID
+  keyword     String? // 关键词
+  icon        String? // 图标
+  active_icon String? // 活动图标
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // 反向关联：该分类下的好评记录
   comments GoodComment[] @relation(name: "CategoryToComments")

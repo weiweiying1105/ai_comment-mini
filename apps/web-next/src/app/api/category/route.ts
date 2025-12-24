@@ -8,6 +8,7 @@ const selectFields = {
     parentId: true,
     keyword: true,
     icon: true,
+    active_icon: true,
 }
 
 type CategoryNode = {
@@ -16,9 +17,10 @@ type CategoryNode = {
     parentId: number | null
     keyword: string | null
     icon: string | null
+    active_icon: string | null
     children: CategoryNode[]
 }
-function buildCategoryTree(items: { id: number; name: string; parentId: number | null; keyword: string | null; icon: string | null }[]): CategoryNode[] {
+function buildCategoryTree(items: { id: number; name: string; parentId: number | null; keyword: string | null; icon: string | null; active_icon: string | null }[]): CategoryNode[] {
     const nodeMap = new Map<number, CategoryNode>()
     const roots: CategoryNode[] = []
 
@@ -30,6 +32,7 @@ function buildCategoryTree(items: { id: number; name: string; parentId: number |
             parentId: it.parentId,
             keyword: it.keyword,
             icon: it.icon,
+            active_icon: it.active_icon,
             children: []
         })
     }
@@ -78,13 +81,13 @@ export async function GET(req: NextRequest) {
         // 如果存在 parentId/顶级/keyword 过滤，则直接返回扁平列表
         if (keyword || top || parentIdParam) {
             return createJsonResponse(
-                ResponseUtil.success(categories, '分类查询成功（含keyword与icon）')
+                ResponseUtil.success(categories, '分类查询成功（含keyword、icon、active_icon）')
             )
         }
 
-        const tree = buildCategoryTree(categories)
+        const tree = buildCategoryTree(categories as any)
         return createJsonResponse(
-            ResponseUtil.success(tree, '分类树查询成功（含keyword与icon）')
+            ResponseUtil.success(tree, '分类树查询成功（含keyword、icon、active_icon）')
         )
     } catch (error: any) {
         return createJsonResponse(

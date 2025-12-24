@@ -2105,6 +2105,7 @@ export namespace Prisma {
     parentId: number | null
     keyword: string | null
     icon: string | null
+    active_icon: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2115,6 +2116,7 @@ export namespace Prisma {
     parentId: number | null
     keyword: string | null
     icon: string | null
+    active_icon: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2125,6 +2127,7 @@ export namespace Prisma {
     parentId: number
     keyword: number
     icon: number
+    active_icon: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2147,6 +2150,7 @@ export namespace Prisma {
     parentId?: true
     keyword?: true
     icon?: true
+    active_icon?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2157,6 +2161,7 @@ export namespace Prisma {
     parentId?: true
     keyword?: true
     icon?: true
+    active_icon?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2167,6 +2172,7 @@ export namespace Prisma {
     parentId?: true
     keyword?: true
     icon?: true
+    active_icon?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2264,6 +2270,7 @@ export namespace Prisma {
     parentId: number | null
     keyword: string | null
     icon: string | null
+    active_icon: string | null
     createdAt: Date
     updatedAt: Date
     _count: CategoryCountAggregateOutputType | null
@@ -2293,6 +2300,7 @@ export namespace Prisma {
     parentId?: boolean
     keyword?: boolean
     icon?: boolean
+    active_icon?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     comments?: boolean | Category$commentsArgs<ExtArgs>
@@ -2305,6 +2313,7 @@ export namespace Prisma {
     parentId?: boolean
     keyword?: boolean
     icon?: boolean
+    active_icon?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["category"]>
@@ -2315,6 +2324,7 @@ export namespace Prisma {
     parentId?: boolean
     keyword?: boolean
     icon?: boolean
+    active_icon?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -2336,6 +2346,7 @@ export namespace Prisma {
       parentId: number | null
       keyword: string | null
       icon: string | null
+      active_icon: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["category"]>
@@ -2737,6 +2748,7 @@ export namespace Prisma {
     readonly parentId: FieldRef<"Category", 'Int'>
     readonly keyword: FieldRef<"Category", 'String'>
     readonly icon: FieldRef<"Category", 'String'>
+    readonly active_icon: FieldRef<"Category", 'String'>
     readonly createdAt: FieldRef<"Category", 'DateTime'>
     readonly updatedAt: FieldRef<"Category", 'DateTime'>
   }
@@ -4139,6 +4151,7 @@ export namespace Prisma {
     parentId: 'parentId',
     keyword: 'keyword',
     icon: 'icon',
+    active_icon: 'active_icon',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4361,6 +4374,7 @@ export namespace Prisma {
     parentId?: IntNullableFilter<"Category"> | number | null
     keyword?: StringNullableFilter<"Category"> | string | null
     icon?: StringNullableFilter<"Category"> | string | null
+    active_icon?: StringNullableFilter<"Category"> | string | null
     createdAt?: DateTimeFilter<"Category"> | Date | string
     updatedAt?: DateTimeFilter<"Category"> | Date | string
     comments?: GoodCommentListRelationFilter
@@ -4372,6 +4386,7 @@ export namespace Prisma {
     parentId?: SortOrderInput | SortOrder
     keyword?: SortOrderInput | SortOrder
     icon?: SortOrderInput | SortOrder
+    active_icon?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     comments?: GoodCommentOrderByRelationAggregateInput
@@ -4386,6 +4401,7 @@ export namespace Prisma {
     parentId?: IntNullableFilter<"Category"> | number | null
     keyword?: StringNullableFilter<"Category"> | string | null
     icon?: StringNullableFilter<"Category"> | string | null
+    active_icon?: StringNullableFilter<"Category"> | string | null
     createdAt?: DateTimeFilter<"Category"> | Date | string
     updatedAt?: DateTimeFilter<"Category"> | Date | string
     comments?: GoodCommentListRelationFilter
@@ -4397,6 +4413,7 @@ export namespace Prisma {
     parentId?: SortOrderInput | SortOrder
     keyword?: SortOrderInput | SortOrder
     icon?: SortOrderInput | SortOrder
+    active_icon?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CategoryCountOrderByAggregateInput
@@ -4415,6 +4432,7 @@ export namespace Prisma {
     parentId?: IntNullableWithAggregatesFilter<"Category"> | number | null
     keyword?: StringNullableWithAggregatesFilter<"Category"> | string | null
     icon?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    active_icon?: StringNullableWithAggregatesFilter<"Category"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
   }
@@ -4622,6 +4640,7 @@ export namespace Prisma {
     parentId?: number | null
     keyword?: string | null
     icon?: string | null
+    active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     comments?: GoodCommentCreateNestedManyWithoutCategoryCategoryInput
@@ -4633,6 +4652,7 @@ export namespace Prisma {
     parentId?: number | null
     keyword?: string | null
     icon?: string | null
+    active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     comments?: GoodCommentUncheckedCreateNestedManyWithoutCategoryCategoryInput
@@ -4643,6 +4663,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     keyword?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: GoodCommentUpdateManyWithoutCategoryCategoryNestedInput
@@ -4654,6 +4675,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     keyword?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: GoodCommentUncheckedUpdateManyWithoutCategoryCategoryNestedInput
@@ -4665,6 +4687,7 @@ export namespace Prisma {
     parentId?: number | null
     keyword?: string | null
     icon?: string | null
+    active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4674,6 +4697,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     keyword?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4684,6 +4708,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     keyword?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4973,6 +4998,7 @@ export namespace Prisma {
     parentId?: SortOrder
     keyword?: SortOrder
     icon?: SortOrder
+    active_icon?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -4988,6 +5014,7 @@ export namespace Prisma {
     parentId?: SortOrder
     keyword?: SortOrder
     icon?: SortOrder
+    active_icon?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -4998,6 +5025,7 @@ export namespace Prisma {
     parentId?: SortOrder
     keyword?: SortOrder
     icon?: SortOrder
+    active_icon?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5384,6 +5412,7 @@ export namespace Prisma {
     parentId?: number | null
     keyword?: string | null
     icon?: string | null
+    active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5394,6 +5423,7 @@ export namespace Prisma {
     parentId?: number | null
     keyword?: string | null
     icon?: string | null
+    active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5419,6 +5449,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     keyword?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5429,6 +5460,7 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     keyword?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

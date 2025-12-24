@@ -3,7 +3,10 @@ import { View, Text, Button, Slider, Textarea, Image } from '@tarojs/components'
 import './index.scss'
 import Taro from '@tarojs/taro'
 import { httpGet, httpPost } from '@/utils/http'
-import { ICategory } from '@/mini-taro/typings/index'
+type ICategory = { id: number; name: string; icon?: string }
+// 4B5563  unactive
+// 111827  active
+
 const OPTION_TAGS = [
   { key: 'warm', label: '语气更热情' },
   { key: 'photo', label: '提到拍照好看' },
@@ -66,7 +69,7 @@ const goAllCategory =()=>{
               onClick={() => setCategory(item.id)}
             >
               <View className={`icon-circle ${category === item.id ? 'active' : ''}`}>
-                <Text className='icon'>{item.icon}</Text>
+                <Image className='icon' src={item.icon} />
               </View>
               <Text className={`label ${category === item.id ? 'active' : ''}`}>{item.name}</Text>
             </View>
@@ -123,7 +126,7 @@ const goAllCategory =()=>{
             className={`option-tag ${selectedOptions.includes(opt.key) ? 'checked' : ''}`}
             onClick={() => handleToggleOption(opt.key)}
           >
-            <Text>{opt.name}</Text>
+            <Text>{opt.label}</Text>
           </View>
         ))}
       </View>
