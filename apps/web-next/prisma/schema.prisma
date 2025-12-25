@@ -42,7 +42,8 @@ model Category {
   active_icon String?  // 活动图标
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+  // 被使用次数，用来描述是否热门
+  use_count Int @default(0)
   // 反向关联：该分类下的好评记录
   comments  GoodComment[] @relation(name: "CategoryToComments")
 }

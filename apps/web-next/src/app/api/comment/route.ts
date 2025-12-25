@@ -73,18 +73,29 @@ export async function POST(request: NextRequest) {
         }
 
         const data = await resp.json()
-        const content: string = data?.choices?.[0]?.message?.content?.trim() ?? ''
-        // 生成评论记录
-        const result = await prisma.goodComment.create({
+        const content: string = data?.choices?.[0]?.message?.content?.trim() ?? '';
+        // 事务
+        const result = await prisma.$transaction([
+           prisma.goodComment.create({
             data: {
                 userId: user.userId,
                 category: categoryId,
                 categoryName: categoryName,
                 content,
             }
-        })
+        }),
+            // 生成评论记录
+            prisma.category.update({
+                where:{
+                    id: categoryId,
+                },
+                data: {
+                    use_count: { increment: 1 }
+                }
+            }),
+        ])
 
-        return createJsonResponse(ResponseUtil.success({ text: result.content }, '生成成功'))
+        return createJsonResponse(ResponseUtil.success({ text: result[0].content }, '生成成功'))
 
     } catch (error) {
         console.error('获取支出记录失败:', error);

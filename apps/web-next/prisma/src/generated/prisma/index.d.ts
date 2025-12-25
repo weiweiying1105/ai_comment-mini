@@ -2092,11 +2092,13 @@ export namespace Prisma {
   export type CategoryAvgAggregateOutputType = {
     id: number | null
     parentId: number | null
+    use_count: number | null
   }
 
   export type CategorySumAggregateOutputType = {
     id: number | null
     parentId: number | null
+    use_count: number | null
   }
 
   export type CategoryMinAggregateOutputType = {
@@ -2108,6 +2110,7 @@ export namespace Prisma {
     active_icon: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    use_count: number | null
   }
 
   export type CategoryMaxAggregateOutputType = {
@@ -2119,6 +2122,7 @@ export namespace Prisma {
     active_icon: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    use_count: number | null
   }
 
   export type CategoryCountAggregateOutputType = {
@@ -2130,6 +2134,7 @@ export namespace Prisma {
     active_icon: number
     createdAt: number
     updatedAt: number
+    use_count: number
     _all: number
   }
 
@@ -2137,11 +2142,13 @@ export namespace Prisma {
   export type CategoryAvgAggregateInputType = {
     id?: true
     parentId?: true
+    use_count?: true
   }
 
   export type CategorySumAggregateInputType = {
     id?: true
     parentId?: true
+    use_count?: true
   }
 
   export type CategoryMinAggregateInputType = {
@@ -2153,6 +2160,7 @@ export namespace Prisma {
     active_icon?: true
     createdAt?: true
     updatedAt?: true
+    use_count?: true
   }
 
   export type CategoryMaxAggregateInputType = {
@@ -2164,6 +2172,7 @@ export namespace Prisma {
     active_icon?: true
     createdAt?: true
     updatedAt?: true
+    use_count?: true
   }
 
   export type CategoryCountAggregateInputType = {
@@ -2175,6 +2184,7 @@ export namespace Prisma {
     active_icon?: true
     createdAt?: true
     updatedAt?: true
+    use_count?: true
     _all?: true
   }
 
@@ -2273,6 +2283,7 @@ export namespace Prisma {
     active_icon: string | null
     createdAt: Date
     updatedAt: Date
+    use_count: number
     _count: CategoryCountAggregateOutputType | null
     _avg: CategoryAvgAggregateOutputType | null
     _sum: CategorySumAggregateOutputType | null
@@ -2303,6 +2314,7 @@ export namespace Prisma {
     active_icon?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    use_count?: boolean
     comments?: boolean | Category$commentsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
@@ -2316,6 +2328,7 @@ export namespace Prisma {
     active_icon?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    use_count?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectScalar = {
@@ -2327,6 +2340,7 @@ export namespace Prisma {
     active_icon?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    use_count?: boolean
   }
 
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2349,6 +2363,7 @@ export namespace Prisma {
       active_icon: string | null
       createdAt: Date
       updatedAt: Date
+      use_count: number
     }, ExtArgs["result"]["category"]>
     composites: {}
   }
@@ -2751,6 +2766,7 @@ export namespace Prisma {
     readonly active_icon: FieldRef<"Category", 'String'>
     readonly createdAt: FieldRef<"Category", 'DateTime'>
     readonly updatedAt: FieldRef<"Category", 'DateTime'>
+    readonly use_count: FieldRef<"Category", 'Int'>
   }
     
 
@@ -4153,7 +4169,8 @@ export namespace Prisma {
     icon: 'icon',
     active_icon: 'active_icon',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    use_count: 'use_count'
   };
 
   export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -4377,6 +4394,7 @@ export namespace Prisma {
     active_icon?: StringNullableFilter<"Category"> | string | null
     createdAt?: DateTimeFilter<"Category"> | Date | string
     updatedAt?: DateTimeFilter<"Category"> | Date | string
+    use_count?: IntFilter<"Category"> | number
     comments?: GoodCommentListRelationFilter
   }
 
@@ -4389,6 +4407,7 @@ export namespace Prisma {
     active_icon?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    use_count?: SortOrder
     comments?: GoodCommentOrderByRelationAggregateInput
   }
 
@@ -4404,6 +4423,7 @@ export namespace Prisma {
     active_icon?: StringNullableFilter<"Category"> | string | null
     createdAt?: DateTimeFilter<"Category"> | Date | string
     updatedAt?: DateTimeFilter<"Category"> | Date | string
+    use_count?: IntFilter<"Category"> | number
     comments?: GoodCommentListRelationFilter
   }, "id" | "name">
 
@@ -4416,6 +4436,7 @@ export namespace Prisma {
     active_icon?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    use_count?: SortOrder
     _count?: CategoryCountOrderByAggregateInput
     _avg?: CategoryAvgOrderByAggregateInput
     _max?: CategoryMaxOrderByAggregateInput
@@ -4435,6 +4456,7 @@ export namespace Prisma {
     active_icon?: StringNullableWithAggregatesFilter<"Category"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
+    use_count?: IntWithAggregatesFilter<"Category"> | number
   }
 
   export type GoodCommentWhereInput = {
@@ -4643,6 +4665,7 @@ export namespace Prisma {
     active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    use_count?: number
     comments?: GoodCommentCreateNestedManyWithoutCategoryCategoryInput
   }
 
@@ -4655,6 +4678,7 @@ export namespace Prisma {
     active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    use_count?: number
     comments?: GoodCommentUncheckedCreateNestedManyWithoutCategoryCategoryInput
   }
 
@@ -4666,6 +4690,7 @@ export namespace Prisma {
     active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    use_count?: IntFieldUpdateOperationsInput | number
     comments?: GoodCommentUpdateManyWithoutCategoryCategoryNestedInput
   }
 
@@ -4678,6 +4703,7 @@ export namespace Prisma {
     active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    use_count?: IntFieldUpdateOperationsInput | number
     comments?: GoodCommentUncheckedUpdateManyWithoutCategoryCategoryNestedInput
   }
 
@@ -4690,6 +4716,7 @@ export namespace Prisma {
     active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    use_count?: number
   }
 
   export type CategoryUpdateManyMutationInput = {
@@ -4700,6 +4727,7 @@ export namespace Prisma {
     active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    use_count?: IntFieldUpdateOperationsInput | number
   }
 
   export type CategoryUncheckedUpdateManyInput = {
@@ -4711,6 +4739,7 @@ export namespace Prisma {
     active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    use_count?: IntFieldUpdateOperationsInput | number
   }
 
   export type GoodCommentCreateInput = {
@@ -5001,11 +5030,13 @@ export namespace Prisma {
     active_icon?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    use_count?: SortOrder
   }
 
   export type CategoryAvgOrderByAggregateInput = {
     id?: SortOrder
     parentId?: SortOrder
+    use_count?: SortOrder
   }
 
   export type CategoryMaxOrderByAggregateInput = {
@@ -5017,6 +5048,7 @@ export namespace Prisma {
     active_icon?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    use_count?: SortOrder
   }
 
   export type CategoryMinOrderByAggregateInput = {
@@ -5028,11 +5060,13 @@ export namespace Prisma {
     active_icon?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    use_count?: SortOrder
   }
 
   export type CategorySumOrderByAggregateInput = {
     id?: SortOrder
     parentId?: SortOrder
+    use_count?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -5135,6 +5169,14 @@ export namespace Prisma {
     connect?: GoodCommentWhereUniqueInput | GoodCommentWhereUniqueInput[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type GoodCommentUpdateManyWithoutCategoryCategoryNestedInput = {
     create?: XOR<GoodCommentCreateWithoutCategoryCategoryInput, GoodCommentUncheckedCreateWithoutCategoryCategoryInput> | GoodCommentCreateWithoutCategoryCategoryInput[] | GoodCommentUncheckedCreateWithoutCategoryCategoryInput[]
     connectOrCreate?: GoodCommentCreateOrConnectWithoutCategoryCategoryInput | GoodCommentCreateOrConnectWithoutCategoryCategoryInput[]
@@ -5147,14 +5189,6 @@ export namespace Prisma {
     update?: GoodCommentUpdateWithWhereUniqueWithoutCategoryCategoryInput | GoodCommentUpdateWithWhereUniqueWithoutCategoryCategoryInput[]
     updateMany?: GoodCommentUpdateManyWithWhereWithoutCategoryCategoryInput | GoodCommentUpdateManyWithWhereWithoutCategoryCategoryInput[]
     deleteMany?: GoodCommentScalarWhereInput | GoodCommentScalarWhereInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type GoodCommentUncheckedUpdateManyWithoutCategoryCategoryNestedInput = {
@@ -5415,6 +5449,7 @@ export namespace Prisma {
     active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    use_count?: number
   }
 
   export type CategoryUncheckedCreateWithoutCommentsInput = {
@@ -5426,6 +5461,7 @@ export namespace Prisma {
     active_icon?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    use_count?: number
   }
 
   export type CategoryCreateOrConnectWithoutCommentsInput = {
@@ -5452,6 +5488,7 @@ export namespace Prisma {
     active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    use_count?: IntFieldUpdateOperationsInput | number
   }
 
   export type CategoryUncheckedUpdateWithoutCommentsInput = {
@@ -5463,6 +5500,7 @@ export namespace Prisma {
     active_icon?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    use_count?: IntFieldUpdateOperationsInput | number
   }
 
   export type GoodCommentCreateManyCategoryCategoryInput = {

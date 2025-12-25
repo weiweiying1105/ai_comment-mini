@@ -23,7 +23,7 @@ const Profile: FC = () => {
   useEffect(() => {
     httpGet('/api/category').then(res => {
       // console.log(res)
-      const result = res.slice(0,8) as ICategory[];
+      const result = res.slice(0,7) as ICategory[];
       // console.log(result)
       setCategory(res[0]?.id || [])
       setCategoryList(result|| [])
@@ -74,6 +74,15 @@ const goAllCategory =()=>{
               <Text className={`label ${category === item.id ? 'active' : ''}`}>{item.name}</Text>
             </View>
           ))}
+            <View
+              className="category-item"
+              onClick={()=>goAllCategory()}
+            >
+              <View className="icon-circle">
+                <Image className='icon' src= "https://res.cloudinary.com/dc6wdjxld/image/upload/v1766648561/more_urb5kq.png"/>
+              </View>
+              <Text className={`label}`} >更多</Text>
+            </View>
         </View>
       </View>
 

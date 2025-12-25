@@ -148,7 +148,8 @@ exports.Prisma.CategoryScalarFieldEnum = {
   icon: 'icon',
   active_icon: 'active_icon',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  use_count: 'use_count'
 };
 
 exports.Prisma.GoodCommentScalarFieldEnum = {

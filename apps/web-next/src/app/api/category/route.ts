@@ -9,6 +9,7 @@ const selectFields = {
     keyword: true,
     icon: true,
     active_icon: true,
+    use_count: true,
 }
 
 type CategoryNode = {
@@ -18,9 +19,10 @@ type CategoryNode = {
     keyword: string | null
     icon: string | null
     active_icon: string | null
+    use_count: number
     children: CategoryNode[]
 }
-function buildCategoryTree(items: { id: number; name: string; parentId: number | null; keyword: string | null; icon: string | null; active_icon: string | null }[]): CategoryNode[] {
+function buildCategoryTree(items: { id: number; name: string; parentId: number | null; keyword: string | null; icon: string | null; active_icon: string | null; use_count: number }[]): CategoryNode[] {
     const nodeMap = new Map<number, CategoryNode>()
     const roots: CategoryNode[] = []
 
@@ -33,6 +35,7 @@ function buildCategoryTree(items: { id: number; name: string; parentId: number |
             keyword: it.keyword,
             icon: it.icon,
             active_icon: it.active_icon,
+            use_count: it.use_count,
             children: []
         })
     }
@@ -65,6 +68,7 @@ export async function GET(req: NextRequest) {
         const keyword = searchParams.get('keyword') || undefined
         const top = searchParams.get('top')
         const parentIdParam = searchParams.get('parentId')
+        const frequentlyUsed = searchParams.get('frequentlyUsed')
 
         // 按需过滤
         const where: any = {}
@@ -72,16 +76,26 @@ export async function GET(req: NextRequest) {
         if (top) where.parentId = null
         if (parentIdParam) where.parentId = Number(parentIdParam)
 
+        // Default ordering
+        let orderBy = [{ parentId: 'asc' }, { id: 'asc' }]
+        
+        // If frequentlyUsed is true, sort by use_count descending
+        if (frequentlyUsed === 'true') {
+            orderBy = [{ use_count: 'desc' }, { id: 'asc' }]
+            // Only show categories with use_count > 0
+            where.use_count = { gt: 0 }
+        }
+
         const categories = await prisma.category.findMany({
             where,
             select: selectFields,
-            orderBy: [{ parentId: 'asc' }, { id: 'asc' }]
+            orderBy
         })
 
-        // 如果存在 parentId/顶级/keyword 过滤，则直接返回扁平列表
-        if (keyword || top || parentIdParam) {
+        // 如果存在 parentId/顶级/keyword 过滤或请求的是常用分类，则直接返回扁平列表
+        if (keyword || top || parentIdParam || frequentlyUsed === 'true') {
             return createJsonResponse(
-                ResponseUtil.success(categories, '分类查询成功（含keyword、icon、active_icon）')
+                ResponseUtil.success(categories, frequentlyUsed === 'true' ? '常用分类查询成功' : '分类查询成功（含keyword、icon、active_icon）')
             )
         }
 

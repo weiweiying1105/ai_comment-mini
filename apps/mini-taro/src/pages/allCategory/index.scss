@@ -58,6 +58,9 @@
   box-sizing: border-box;
   border-radius: 42rpx;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* hover 效果（H5 下可见，小程序端忽略） */
@@ -125,6 +128,7 @@
   font-size: 28rpx; /* text-sm */
   font-weight: 500; /* medium */
   transition: transform 0.12s ease; /* active:scale-95 */
+  margin: 0;
 }
 
 .chip:active {

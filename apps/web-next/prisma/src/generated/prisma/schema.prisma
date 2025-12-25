@@ -35,17 +35,18 @@ model User {
 
 // 分类模型
 model Category {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique // 分类名称
+  id          Int           @id @default(autoincrement())
+  name        String        @unique // 分类名称
   parentId    Int? // 父分类ID
   keyword     String? // 关键词
   icon        String? // 图标
   active_icon String? // 活动图标
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  // 被使用次数，用来描述是否热门
+  use_count   Int           @default(0)
   // 反向关联：该分类下的好评记录
-  comments GoodComment[] @relation(name: "CategoryToComments")
+  comments    GoodComment[] @relation(name: "CategoryToComments")
 }
 
 // 好评记录
