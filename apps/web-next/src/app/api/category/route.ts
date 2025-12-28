@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createJsonResponse, ResponseUtil } from '@/lib/response'
+import fs from 'fs/promises'
+import path from 'path'
 
 // 在生产环境启用 60s 缓存
 export const revalidate = 60
@@ -88,6 +90,9 @@ export async function GET(req: NextRequest) {
         const frequentlyUsed = searchParams.get('frequentlyUsed')
         const limitParam = searchParams.get('limit')
         const limit = limitParam ? Number(limitParam) : undefined
+        const snapshotParam = searchParams.get('snapshot')
+        const useSnapshotFlag = snapshotParam === 'true' || process.env.USE_CATEGORY_SNAPSHOT === '1'
+        const canUseSnapshot = useSnapshotFlag && !keyword && !top && !parentIdParam && frequentlyUsed !== 'true'
 
         // 缓存 key
         const cacheKey = JSON.stringify({
@@ -96,6 +101,7 @@ export async function GET(req: NextRequest) {
             parentId: parentIdParam ? Number(parentIdParam) : null,
             frequentlyUsed: frequentlyUsed === 'true',
             limit,
+            snapshot: !!canUseSnapshot,
         })
         const cached = getCached(cacheKey)
         if (cached) {
@@ -113,12 +119,43 @@ export async function GET(req: NextRequest) {
             })
         }
 
+        // 快照优先：用于避免首次请求的数据库唤醒/网络延迟
+        if (canUseSnapshot) {
+            const candidates = [
+                path.resolve(process.cwd(), 'public', 'category-snapshot.json'),
+                path.resolve(process.cwd(), 'src', 'data', 'category-snapshot.json'),
+            ]
+            let snapshotData: any | null = null
+            for (const p of candidates) {
+                try {
+                    const buf = await fs.readFile(p, 'utf-8')
+                    snapshotData = JSON.parse(buf)
+                    break
+                } catch (_) {}
+            }
+            if (snapshotData) {
+                setCached(cacheKey, snapshotData)
+                const tEnd = Date.now()
+                console.log(`[API/category] snapshot-return total=${tEnd - t0}ms`)
+                return createJsonResponse(
+                    ResponseUtil.success(snapshotData, '分类快照返回'),
+                    {
+                        headers: {
+                            'Cache-Control': 's-maxage=60, stale-while-revalidate=300'
+                        }
+                    }
+                )
+            } else {
+                console.warn('[API/category] snapshot enabled but file not found')
+            }
+        }
+
         // 按需过滤
         const where: any = {}
         if (keyword) where.keyword = keyword
         if (top) where.parentId = null
         if (parentIdParam) where.parentId = Number(parentIdParam)
-
+        
         // Default ordering
         let orderBy: Array<Record<string, 'asc' | 'desc'>> = [{ parentId: 'asc' }, { id: 'asc' }]
         
