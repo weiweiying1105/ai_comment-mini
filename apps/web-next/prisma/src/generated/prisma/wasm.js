@@ -18,11 +18,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 5.22.0
- * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+ * Query Engine version: acc0b9dd43eb689cbd20c9470515d719db10d0b0
  */
 Prisma.prismaVersion = {
   client: "5.22.0",
-  engine: "605197351a3c8bdd595af2d2a9bc3025bca48ea2"
+  engine: "acc0b9dd43eb689cbd20c9470515d719db10d0b0"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -154,13 +154,14 @@ exports.Prisma.CategoryScalarFieldEnum = {
 
 exports.Prisma.GoodCommentScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   commentId: 'commentId',
   category: 'category',
   categoryName: 'categoryName',
   content: 'content',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  isTemplate: 'isTemplate'
 };
 
 exports.Prisma.SortOrder = {

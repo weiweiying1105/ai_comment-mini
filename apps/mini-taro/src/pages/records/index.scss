@@ -1,0 +1,209 @@
+.records-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f8f8f8;
+}
+
+.back-btn {
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 9999rpx;
+    background: transparent;
+}
+
+.title {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #181811;
+    flex: 1;
+    text-align: center;
+    padding-right: 64rpx;
+}
+
+.search-wrap {
+    position: sticky;
+    top: 0rpx;
+    z-index: 10;
+    background: #fff;
+    padding: 0 32rpx 24rpx;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16rpx;
+    width: 40rpx;
+    text-align: center;
+    color: #9CA3AF;
+}
+
+.search-input {
+    width: 100%;
+    padding-left: 64rpx;
+    padding-right: 24rpx;
+    height: 72rpx;
+    border: none;
+    border-radius: 24rpx;
+    background: #fff;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.chips-row {
+    margin-top: 16rpx;
+    white-space: nowrap;
+}
+
+.chips-inner {
+    display: flex;
+    gap: 12rpx;
+    padding-bottom: 12rpx;
+}
+
+.chip {
+    margin: 0 10rpx;
+    padding: 6rpx 30rpx;
+    border-radius: 9999rpx;
+    background: #fff;
+    color: #181811;
+    border: 2rpx solid #f0f0f0;
+    font-size: 22rpx;
+}
+
+.chip.active {
+    background: #181811;
+    color: #fff;
+}
+
+.list {
+    flex: 1;
+    padding: 16rpx 32rpx 120rpx;
+    box-sizing: border-box;
+}
+
+.card {
+    background: #fff;
+    border: 2rpx solid #f0f0f0;
+    border-radius: 24rpx;
+    padding: 24rpx;
+    margin-bottom: 24rpx;
+    box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16rpx;
+}
+
+.tag {
+    padding: 6rpx 12rpx;
+    background: #f2f2f2;
+    border-radius: 12rpx;
+    font-size: 20rpx;
+    color: #6B7280;
+}
+
+.date {
+    font-size: 22rpx;
+    color: #9CA3AF;
+}
+
+.content {
+    font-size: 26rpx;
+    color: #181811;
+    line-height: 1.6;
+    margin-bottom: 16rpx;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12rpx;
+    border-top: 2rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8rpx;
+    font-size: 28rpx;
+    color: #ffd400;
+    margin-top: 16rpx;
+    padding: 20rpx;
+
+    .copy-icon {
+        width: 24rpx;
+        height: 24rpx;
+        margin-left: 8rpx;
+    }
+
+    .copy-hint {
+        font-size: 24rpx;
+        color: #999;
+
+    }
+}
+
+.template-btn {
+    margin: 0;
+    font-size: 22rpx;
+    background-color: rgb(249, 245, 6);
+    border-radius: 9999rpx;
+    color: rgb(24 24 17 / var(--tw-text-opacity, 1));
+
+    &:active {
+        color: #181811;
+        background-color: rgb(249 245 6 / 0.2);
+
+    }
+}
+
+.empty {
+    padding: 48rpx 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16rpx;
+    color: #9CA3AF;
+}
+
+.empty-bar {
+    width: 96rpx;
+    height: 8rpx;
+    background: #e5e7eb;
+    border-radius: 8rpx;
+}
+
+.empty-text {
+    font-size: 22rpx;
+}
+
+.fab-wrap {
+    position: absolute;
+    bottom: 48rpx;
+    right: 48rpx;
+    z-index: 30;
+}
+
+.fab {
+    width: 112rpx;
+    height: 112rpx;
+    border-radius: 9999rpx;
+    background: #FACC15;
+    color: #181811;
+    box-shadow: 0 16rpx 60rpx rgba(0, 0, 0, 0.12);
+}
+
+.fab-icon {
+    font-size: 48rpx;
+}

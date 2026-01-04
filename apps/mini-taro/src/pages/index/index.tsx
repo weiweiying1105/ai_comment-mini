@@ -1,9 +1,9 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { View, Text, Button, Slider, Textarea, Image } from '@tarojs/components'
 import './index.scss'
-import Taro from '@tarojs/taro'
+import Taro, { useRouter, useDidShow } from '@tarojs/taro'
 import { httpGet, httpPost } from '@/utils/http'
-type ICategory = { id: number; name: string; icon?: string }
+import { ICategory } from '../../../typings'
 // 4B5563  unactive
 // 111827  active
 
@@ -19,6 +19,20 @@ const Profile: FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([])
   const [result, setResult] = useState('')
 
+  const router = useRouter()
+  
+
+  const [selectedChild, setSelectedChild] = useState<ICategory | null>(Taro.getStorageSync('selectChild') || null)
+  useEffect(() => {
+    // console.log('selectedChild', selectedChild)
+    if(selectedChild&&selectedChild?.id){
+      setSelectedChild(selectedChild)
+      setCategory(selectedChild?.parentId || undefined)
+      Taro.setStorageSync('selectChild', selectedChild)
+    }
+      
+  },[selectedChild?.id])
+ 
   const [categoryList, setCategoryList] = useState<ICategory[]>([])
   useEffect(() => {
     httpGet('/api/category').then(res => {
@@ -38,22 +52,33 @@ const Profile: FC = () => {
   }, [])
 
   const buildReview = () => {
+    console.log('buildReview', selectedChild)
     const catLabel = categoryList.find(c => c.id === category)?.name || '美食'
     httpPost('/api/comment', {
       words:limit,
-      categoryName:catLabel,
-      categoryId:category,
+      categoryName:selectedChild?.name || catLabel,
+      categoryId:selectedChild?.id || category,
     }).then(res=>{
       console.log(res)
       setResult(res.text)
     })
   
   }
-const goAllCategory =()=>{
-  Taro.navigateTo({
-    url: '/pages/allCategory/index'
-  })
-}
+ const goAllCategory =()=>{
+   Taro.navigateTo({
+     url: '/pages/allCategory/index',
+     events: {
+       'selectChild:update': (payload: ICategory) => {
+         setSelectedChild(payload)
+         setCategory(payload.parentId || payload.id)
+       }
+     }
+   })
+ }
+ const handleCancelChild = ()=>{
+   Taro.setStorageSync('selectChild', null)
+   setSelectedChild(null)
+ }
   return (
     <View className='profile-page'>
       <View className='section'>
@@ -69,7 +94,7 @@ const goAllCategory =()=>{
               onClick={() => setCategory(item.id)}
             >
               <View className={`icon-circle ${category === item.id ? 'active' : ''}`}>
-                <Image className='icon' src={item.icon} />
+                <Image className='icon' src={(item as any).icon || ''} />
               </View>
               <Text className={`label ${category === item.id ? 'active' : ''}`}>{item.name}</Text>
             </View>
@@ -81,19 +106,20 @@ const goAllCategory =()=>{
               <View className="icon-circle">
                 <Image className='icon' src= "https://res.cloudinary.com/dc6wdjxld/image/upload/v1766648561/more_urb5kq.png"/>
               </View>
-              <Text className={`label}`} >更多</Text>
+              <Text className='label' >更多</Text>
             </View>
         </View>
         {/* 这里是二级分类 */}
+       {selectedChild&&selectedChild?.name ? ( 
         <View className='second-tags'>
-          <View className='chip'>
-            <Text className='chip-label'>火锅</Text>
-            <Button className='chip-close'>
+            <View className='chip'>
+             <Text className='chip-label'>{selectedChild?.name}</Text>
+             <Button className='chip-close' onClick={()=>handleCancelChild()}>
               <Image className='chip-close-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766820858/close_1_bfrids.png"></Image>
-           </Button>
-         </View>
-        </View>
-      </View>
+             </Button>
+            </View>
+          </View>
+       ):null}
 
       <View className='divider' />
 
@@ -152,8 +178,10 @@ const goAllCategory =()=>{
       <View className='footer'>
         <Button className='generate-btn' onClick={buildReview}>✨ 生成好评</Button>
       </View>
-    </View>
-  )
-}
+      </View>
+      </View>
+      
+    )
+  }
 
-export default Profile
+  export default Profile

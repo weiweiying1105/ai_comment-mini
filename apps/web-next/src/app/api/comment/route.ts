@@ -76,17 +76,17 @@ export async function POST(request: NextRequest) {
         const content: string = data?.choices?.[0]?.message?.content?.trim() ?? '';
         // 事务
         const result = await prisma.$transaction([
-           prisma.goodComment.create({
-            data: {
-                userId: user.userId,
-                category: categoryId,
-                categoryName: categoryName,
-                content,
-            }
-        }),
+            prisma.goodComment.create({
+                data: {
+                    userId: user.userId,
+                    category: categoryId,
+                    categoryName: categoryName,
+                    content,
+                }
+            }),
             // 生成评论记录
             prisma.category.update({
-                where:{
+                where: {
                     id: categoryId,
                 },
                 data: {
@@ -97,6 +97,38 @@ export async function POST(request: NextRequest) {
 
         return createJsonResponse(ResponseUtil.success({ text: result[0].content }, '生成成功'))
 
+    } catch (error) {
+        console.error('获取支出记录失败:', error);
+        return createJsonResponse(
+            ResponseUtil.error('服务器内部错误'),
+            { status: 500 }
+        );
+    }
+}
+
+
+export async function GET(request: NextRequest) {
+    try {
+        const user = await verifyToken(request);
+        if (!user) {
+            return createJsonResponse(
+                ResponseUtil.error('未授权访问'),
+                { status: 401 }
+            );
+        }
+        // 查询用户的好评记录，按创建时间倒序
+        const records = await prisma.goodComment.findMany({
+            where: {
+                userId: user.userId,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        return createJsonResponse(
+            ResponseUtil.success({ records }, '查询成功')
+        );
     } catch (error) {
         console.error('获取支出记录失败:', error);
         return createJsonResponse(

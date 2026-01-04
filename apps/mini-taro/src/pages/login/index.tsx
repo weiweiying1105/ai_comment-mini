@@ -1,4 +1,4 @@
-import { View, Text, Button, Checkbox } from '@tarojs/components'
+import { View, Text, Button, Checkbox, CheckboxGroup } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useEffect, useMemo, useState } from 'react'
 import './index.scss'
@@ -12,8 +12,8 @@ export default function LoginPage() {
     backgroundImage: `url(https://picsum.photos/200)`,
   }), [])
 
- 
-const [loading, setLoading] = useState(false)
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     // 检查是否已经登录
@@ -112,18 +112,24 @@ const [loading, setLoading] = useState(false)
       <View className='action-area'>
         {/* Legal / Compliance */}
         <View className='terms'>
-          <Checkbox
-            className='terms-checkbox'
-            value='agree'
-            checked={agree}
-            onChange={(e) => setAgree(!!e.detail.value?.length)}
-          />
-          <Text className='terms-text'>
-            我已阅读并同意
-            <Text className='link'>《用户协议》</Text>
-            和
-            <Text className='link'>《隐私政策》</Text>
-          </Text>
+          <CheckboxGroup
+            onChange={(e) => setAgree(e.detail.value.includes('agree'))}
+          >
+            <Checkbox
+              className='terms-checkbox'
+              value='agree'
+              checked={agree}
+              color='#FACC15'
+            >
+              <Text className='terms-text'>
+                我已阅读并同意
+                <Text className='link'>《用户协议》</Text>
+                和
+                <Text className='link'>《隐私政策》</Text>
+              </Text>
+            </Checkbox>
+          </CheckboxGroup>
+
         </View>
 
         {/* Login Button */}

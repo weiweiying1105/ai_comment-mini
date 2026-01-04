@@ -1,6 +1,7 @@
 import { View, Text } from '@tarojs/components'
 import { useMemo } from 'react'
 import './index.scss'
+import Taro from '@tarojs/taro'
 
 const AVATAR_URL = 'https://picsum.photos/200'
 
@@ -53,7 +54,7 @@ export default function ProfilePage() {
       <View className='menu-group'>
         <Text className='section-title'>常用功能</Text>
         <View className='menu-card'>
-          <View className='menu-item'>
+          <View className='menu-item' onClick={() => Taro.navigateTo({ url: '/pages/records/index' })}>
             <View className='menu-icon primary'>
               <Text className='icon'>⏱</Text>
             </View>

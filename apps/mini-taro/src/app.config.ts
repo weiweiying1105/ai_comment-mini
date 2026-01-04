@@ -5,7 +5,8 @@ export default defineAppConfig({
     'pages/allCategory/index',
     'pages/login/index',
     "pages/privacy-policy/index",
-    "pages/user-agreement/index"
+    "pages/user-agreement/index",
+    "pages/records/index"
   ],
   tabBar: {
     list: [

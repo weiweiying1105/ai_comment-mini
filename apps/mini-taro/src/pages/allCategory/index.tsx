@@ -1,23 +1,37 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { View, Text, Input, Button } from '@tarojs/components'
 import './index.scss'
-import { useDidShow } from '@tarojs/taro'
-import { get } from '@/utils/request'
+import Taro, { useDidShow } from '@tarojs/taro';
 import { httpGet } from '@/utils/http'
-import { ICategory } from '../../../typings'
+import { ICategory } from '../../../typings';
 
 
 const AllCategory: FC = () => {
-  const [parent, setParent] = useState<ICategory['id']>()
+  const [parent, setParent] = useState<ICategory['id']>();
+  const [selectChild, setSelectChild] = useState<ICategory | null>(null)
+  const [hasUserSelected, setHasUserSelected] = useState(false)
   const [search, setSearch] = useState('')
   const [categoryList, setCategoryList] = useState<ICategory[]>([])
 
+
+// useEffect(() => {
+//   if(Taro.getStorageSync('selectChild') && Taro.getStorageSync('selectChild').id){
+//     setSelectChild(Taro.getStorageSync('selectChild'))
+//   }
+// })
 
 useEffect(() => {
   httpGet('/api/category').then(res => {
     setParent(res[0]?.id)
     setCategoryList(res|| [])
   })
+}, [])
+// 加载时读取缓存，作为初始高亮，不触发返回
+useEffect(() => {
+  const cached = Taro.getStorageSync('selectChild') as ICategory | undefined
+  if (cached && cached.id) {
+    setSelectChild(cached)
+  }
 }, [])
   // 左边的一级分类
   const parentList = useMemo(() => {
@@ -29,6 +43,18 @@ useEffect(() => {
     return categoryList.find(x => x.id === parent)?.children || []
   }, [categoryList, parent])
 
+  // 监听二级分类选中
+  useEffect(() => {
+    if (!hasUserSelected) return
+    if (!selectChild || !selectChild.id) return
+    // 通过事件通道把选中的子分类回传给上一页
+    const ec = Taro.getCurrentInstance().page?.getOpenerEventChannel?.()
+    ec?.emit('selectChild:update', { ...selectChild })
+    // 返回上一页
+    Taro.navigateBack({
+      delta: 1,
+    })
+  }, [hasUserSelected, selectChild?.id])
   return (
     <View className='all-category-page'>
       {/* 搜索框 */}
@@ -85,7 +111,13 @@ useEffect(() => {
             <View className='section-title'>分类</View>
             <View className='chips'>
               {secondList.map((c, i) => (
-                <Button key={c.id} className={`chip ${c.id === parent ? 'active' : ''}`}>{c.name}</Button>
+                <Button
+                  key={c.id}
+                  className={`chip ${c.id === selectChild?.id ? 'active' : ''}`}
+                  onClick={() => { setSelectChild({ ...c }); setHasUserSelected(true); }}
+                >
+                  {c.name}
+                </Button>
               ))}
             </View>
           </View>
