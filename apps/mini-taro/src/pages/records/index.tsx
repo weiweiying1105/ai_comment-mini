@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { View, Text, Input, Button, ScrollView, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { httpGet } from '@/utils/http'
+import { httpGet, httpPut } from '@/utils/http'
 import './index.scss'
 
 interface GoodComment {
@@ -66,6 +66,17 @@ const Records: FC = () => {
             })
     }
 
+    // 设置/取消收藏模板
+    const handleSetTemplate = async (id: number, isTemplate: boolean) => {
+        try {
+            await httpPut('/api/comment',{id,isTemplate })
+            Taro.showToast({ title: isTemplate ? '已取消收藏' : '已收藏', icon: 'success' })
+        } catch (e) {
+            console.error('设置收藏状态失败', e)
+            Taro.showToast({ title: '操作失败', icon: 'none' })
+        }
+    }
+
     return (
         <View className='records-page'>
 
@@ -109,7 +120,7 @@ const Records: FC = () => {
                                 <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
                                 <Text className='copy-hint'>复制</Text>
                             </View>
-                            <Button className={`template-btn ${r.isTemplate ? 'active' : ''}`}>
+                            <Button onClick={() => handleSetTemplate(r.id , r.isTemplate)} className={`template-btn ${!r.isTemplate ? 'active' : ''}`}>
                                 {r.isTemplate ? '取消模板' : '设置为模板'}
                             </Button>
                         </View>

@@ -23,11 +23,32 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/login/index",
-          "pathName": "pages/login/index",
+          "name": "pages/records/index",
+          "pathName": "pages/records/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/templates/index",
+          "pathName": "pages/templates/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "我的",
+          "pathName": "pages/profile/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/login/index",
+          "pathName": "pages/login/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "pages/allCategory/index",

@@ -67,6 +67,7 @@ model GoodComment {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   userId           String // 用户ID
+  limit            Int // 字数限制
   // 是否已经设置成模版
   isTemplate       Boolean  @default(false)
   // 关联分类

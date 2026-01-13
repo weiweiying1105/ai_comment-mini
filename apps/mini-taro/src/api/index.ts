@@ -5,7 +5,7 @@ export async function callLoginApi(code: string) {
     // 直接使用Taro.request而不是封装的post方法，避免循环调用
     const BASE_URL = (typeof process !== 'undefined' && (process as any).env && (process as any).env.BASE_URL)
         ? (process as any).env.BASE_URL
-        : 'http://localhost:3000'
+        : 'http://localhost:3000/app2'
     try {
         const response = await Taro.request({
             url: `${BASE_URL}/api/auth/login`,

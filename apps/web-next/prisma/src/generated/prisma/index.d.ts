@@ -241,7 +241,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 5.22.0
-   * Query Engine version: acc0b9dd43eb689cbd20c9470515d719db10d0b0
+   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
    */
   export type PrismaVersion = {
     client: string
@@ -2087,7 +2087,6 @@ export namespace Prisma {
      * Filter which Users to update
      */
     where?: UserWhereInput
-    limit?: number
   }
 
   /**
@@ -2142,7 +2141,6 @@ export namespace Prisma {
      * Filter which Users to delete
      */
     where?: UserWhereInput
-    limit?: number
   }
 
   /**
@@ -3127,7 +3125,6 @@ export namespace Prisma {
      * Filter which Categories to update
      */
     where?: CategoryWhereInput
-    limit?: number
   }
 
   /**
@@ -3182,7 +3179,6 @@ export namespace Prisma {
      * Filter which Categories to delete
      */
     where?: CategoryWhereInput
-    limit?: number
   }
 
   /**
@@ -3236,12 +3232,14 @@ export namespace Prisma {
     id: number | null
     commentId: number | null
     category: number | null
+    limit: number | null
   }
 
   export type GoodCommentSumAggregateOutputType = {
     id: number | null
     commentId: number | null
     category: number | null
+    limit: number | null
   }
 
   export type GoodCommentMinAggregateOutputType = {
@@ -3253,6 +3251,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
+    limit: number | null
     isTemplate: boolean | null
   }
 
@@ -3265,6 +3264,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
+    limit: number | null
     isTemplate: boolean | null
   }
 
@@ -3277,6 +3277,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     userId: number
+    limit: number
     isTemplate: number
     _all: number
   }
@@ -3286,12 +3287,14 @@ export namespace Prisma {
     id?: true
     commentId?: true
     category?: true
+    limit?: true
   }
 
   export type GoodCommentSumAggregateInputType = {
     id?: true
     commentId?: true
     category?: true
+    limit?: true
   }
 
   export type GoodCommentMinAggregateInputType = {
@@ -3303,6 +3306,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     userId?: true
+    limit?: true
     isTemplate?: true
   }
 
@@ -3315,6 +3319,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     userId?: true
+    limit?: true
     isTemplate?: true
   }
 
@@ -3327,6 +3332,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     userId?: true
+    limit?: true
     isTemplate?: true
     _all?: true
   }
@@ -3426,6 +3432,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     userId: string
+    limit: number
     isTemplate: boolean
     _count: GoodCommentCountAggregateOutputType | null
     _avg: GoodCommentAvgAggregateOutputType | null
@@ -3457,6 +3464,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    limit?: boolean
     isTemplate?: boolean
     categoryCategory?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3471,6 +3479,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    limit?: boolean
     isTemplate?: boolean
     categoryCategory?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3485,6 +3494,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    limit?: boolean
     isTemplate?: boolean
   }
 
@@ -3512,6 +3522,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       userId: string
+      limit: number
       isTemplate: boolean
     }, ExtArgs["result"]["goodComment"]>
     composites: {}
@@ -3916,6 +3927,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"GoodComment", 'DateTime'>
     readonly updatedAt: FieldRef<"GoodComment", 'DateTime'>
     readonly userId: FieldRef<"GoodComment", 'String'>
+    readonly limit: FieldRef<"GoodComment", 'Int'>
     readonly isTemplate: FieldRef<"GoodComment", 'Boolean'>
   }
     
@@ -4178,7 +4190,6 @@ export namespace Prisma {
      * Filter which GoodComments to update
      */
     where?: GoodCommentWhereInput
-    limit?: number
   }
 
   /**
@@ -4233,7 +4244,6 @@ export namespace Prisma {
      * Filter which GoodComments to delete
      */
     where?: GoodCommentWhereInput
-    limit?: number
   }
 
   /**
@@ -4310,6 +4320,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId',
+    limit: 'limit',
     isTemplate: 'isTemplate'
   };
 
@@ -4607,9 +4618,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"GoodComment"> | Date | string
     updatedAt?: DateTimeFilter<"GoodComment"> | Date | string
     userId?: StringFilter<"GoodComment"> | string
+    limit?: IntFilter<"GoodComment"> | number
     isTemplate?: BoolFilter<"GoodComment"> | boolean
-    categoryCategory?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    categoryCategory?: XOR<CategoryRelationFilter, CategoryWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
   export type GoodCommentOrderByWithRelationInput = {
@@ -4621,6 +4633,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    limit?: SortOrder
     isTemplate?: SortOrder
     categoryCategory?: CategoryOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
@@ -4638,9 +4651,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"GoodComment"> | Date | string
     updatedAt?: DateTimeFilter<"GoodComment"> | Date | string
     userId?: StringFilter<"GoodComment"> | string
+    limit?: IntFilter<"GoodComment"> | number
     isTemplate?: BoolFilter<"GoodComment"> | boolean
-    categoryCategory?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    categoryCategory?: XOR<CategoryRelationFilter, CategoryWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id">
 
   export type GoodCommentOrderByWithAggregationInput = {
@@ -4652,6 +4666,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    limit?: SortOrder
     isTemplate?: SortOrder
     _count?: GoodCommentCountOrderByAggregateInput
     _avg?: GoodCommentAvgOrderByAggregateInput
@@ -4672,6 +4687,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"GoodComment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GoodComment"> | Date | string
     userId?: StringWithAggregatesFilter<"GoodComment"> | string
+    limit?: IntWithAggregatesFilter<"GoodComment"> | number
     isTemplate?: BoolWithAggregatesFilter<"GoodComment"> | boolean
   }
 
@@ -4896,6 +4912,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    limit: number
     isTemplate?: boolean
     categoryCategory: CategoryCreateNestedOneWithoutCommentsInput
     user: UserCreateNestedOneWithoutCommentsInput
@@ -4910,6 +4927,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
+    limit: number
     isTemplate?: boolean
   }
 
@@ -4919,6 +4937,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
     categoryCategory?: CategoryUpdateOneRequiredWithoutCommentsNestedInput
     user?: UserUpdateOneRequiredWithoutCommentsNestedInput
@@ -4933,6 +4952,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -4945,6 +4965,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
+    limit: number
     isTemplate?: boolean
   }
 
@@ -4954,6 +4975,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -4966,6 +4988,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -5244,12 +5267,12 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type CategoryScalarRelationFilter = {
+  export type CategoryRelationFilter = {
     is?: CategoryWhereInput
     isNot?: CategoryWhereInput
   }
 
-  export type UserScalarRelationFilter = {
+  export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
   }
@@ -5263,6 +5286,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    limit?: SortOrder
     isTemplate?: SortOrder
   }
 
@@ -5270,6 +5294,7 @@ export namespace Prisma {
     id?: SortOrder
     commentId?: SortOrder
     category?: SortOrder
+    limit?: SortOrder
   }
 
   export type GoodCommentMaxOrderByAggregateInput = {
@@ -5281,6 +5306,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    limit?: SortOrder
     isTemplate?: SortOrder
   }
 
@@ -5293,6 +5319,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    limit?: SortOrder
     isTemplate?: SortOrder
   }
 
@@ -5300,6 +5327,7 @@ export namespace Prisma {
     id?: SortOrder
     commentId?: SortOrder
     category?: SortOrder
+    limit?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -5636,6 +5664,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    limit: number
     isTemplate?: boolean
     categoryCategory: CategoryCreateNestedOneWithoutCommentsInput
   }
@@ -5648,6 +5677,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    limit: number
     isTemplate?: boolean
   }
 
@@ -5689,6 +5719,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"GoodComment"> | Date | string
     updatedAt?: DateTimeFilter<"GoodComment"> | Date | string
     userId?: StringFilter<"GoodComment"> | string
+    limit?: IntFilter<"GoodComment"> | number
     isTemplate?: BoolFilter<"GoodComment"> | boolean
   }
 
@@ -5698,6 +5729,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    limit: number
     isTemplate?: boolean
     user: UserCreateNestedOneWithoutCommentsInput
   }
@@ -5710,6 +5742,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
+    limit: number
     isTemplate?: boolean
   }
 
@@ -5897,6 +5930,7 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    limit: number
     isTemplate?: boolean
   }
 
@@ -5906,6 +5940,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
     categoryCategory?: CategoryUpdateOneRequiredWithoutCommentsNestedInput
   }
@@ -5918,6 +5953,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -5929,6 +5965,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -5940,6 +5977,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
+    limit: number
     isTemplate?: boolean
   }
 
@@ -5949,6 +5987,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutCommentsNestedInput
   }
@@ -5961,6 +6000,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -5972,6 +6012,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    limit?: IntFieldUpdateOperationsInput | number
     isTemplate?: BoolFieldUpdateOperationsInput | boolean
   }
 

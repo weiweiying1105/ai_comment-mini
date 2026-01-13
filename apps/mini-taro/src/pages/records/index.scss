@@ -90,9 +90,9 @@
 .card {
     background: #fff;
     border: 2rpx solid #f0f0f0;
-    border-radius: 24rpx;
+    border-radius: 52rpx;
     padding: 24rpx;
-    margin-bottom: 24rpx;
+    margin-bottom: 32rpx;
     box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.04);
 }
 
@@ -157,14 +157,13 @@
 .template-btn {
     margin: 0;
     font-size: 22rpx;
-    background-color: rgb(249, 245, 6);
+    background-color: rgb(249, 245, 6, 0.2);
     border-radius: 9999rpx;
     color: rgb(24 24 17 / var(--tw-text-opacity, 1));
 
-    &:active {
+    &.active {
         color: #181811;
-        background-color: rgb(249 245 6 / 0.2);
-
+        background-color: rgb(249 245 6);
     }
 }
 

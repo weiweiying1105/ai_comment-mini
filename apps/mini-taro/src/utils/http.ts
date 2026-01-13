@@ -86,7 +86,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
 
     try {
         const response = await Taro.request({
-            url: `${BASE_URL}${config.url}`,
+            url: `${BASE_URL}/app2${config.url}`,
             method: config.method || 'GET',
             data: config.data,
             header,
@@ -323,7 +323,7 @@ export const httpPost = <T = any>(url: string, data?: any): Promise<T> => {
     return request<T>(config)
 }
 
-export const put = <T = any>(url: string, data?: any): Promise<T> => {
+export const httpPut = <T = any>(url: string, data?: any): Promise<T> => {
     const config: RequestConfig = {
         url,
         method: 'PUT',
@@ -332,13 +332,17 @@ export const put = <T = any>(url: string, data?: any): Promise<T> => {
     return request<T>(config)
 }
 
-export const del = <T = any>(url: string): Promise<T> => {
+export const put = httpPut // 保留旧的函数名以保持兼容性
+
+export const httpDelete = <T = any>(url: string): Promise<T> => {
     const config: RequestConfig = {
         url,
         method: 'DELETE'
     }
     return request<T>(config)
 }
+
+export const del = httpDelete // 保留旧的函数名以保持兼容性
 
 // 导出响应码枚举
 export { ResponseCode }
