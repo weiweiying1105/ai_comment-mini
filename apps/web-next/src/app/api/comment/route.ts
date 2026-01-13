@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
         const content: string = data?.choices?.[0]?.message?.content?.trim() ?? '';
         // 事务
         const result = await prisma.$transaction([
+            // 创建评论
             prisma.goodComment.create({
                 data: {
                     userId: user.userId,
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
                     categoryName: categoryName,
                     content,
                     limit: targetWords,
-                    isTemplate:  false
+                    isTemplate: false
                 }
             }),
             // 生成评论记录
@@ -96,6 +97,7 @@ export async function POST(request: NextRequest) {
                     use_count: { increment: 1 }
                 }
             }),
+
         ])
 
         return createJsonResponse(ResponseUtil.success({ text: result[0].content }, '生成成功'))
@@ -119,8 +121,8 @@ export async function GET(request: NextRequest) {
                 { status: 401 }
             );
         }
-        const  template = request.nextUrl.searchParams.get('template')
-        const _where = template === 'true' ? {isTemplate: true} : {}
+        const template = request.nextUrl.searchParams.get('template')
+        const _where = template === 'true' ? { isTemplate: true } : {}
         // 查询用户的好评记录，按创建时间倒序
         const records = await prisma.goodComment.findMany({
             where: {
@@ -198,7 +200,7 @@ export async function PUT(request: NextRequest) {
                 { status: 401 }
             );
         }
-        const { id,isTemplate } = await request.json();
+        const { id, isTemplate } = await request.json();
         if (!id || typeof id !== 'number' || !Number.isFinite(id) || typeof isTemplate !== 'boolean') {
             return createJsonResponse(
                 ResponseUtil.error('参数错误'),
@@ -212,7 +214,7 @@ export async function PUT(request: NextRequest) {
                 userId: user.userId,
             },
             data: {
-                isTemplate:isTemplate?false:true
+                isTemplate: isTemplate ? false : true
             }
         });
         return createJsonResponse(

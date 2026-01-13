@@ -22,7 +22,7 @@ const Records: FC = () => {
         const load = async () => {
             try {
                 const data = await httpGet<{ records: GoodComment[] }>('/api/comment')
-                setRecords(Array.isArray(data?.records) ? data.records : [])
+                setRecords(data && Array.isArray((data as any).records) ? (data as any).records : [])
             } catch (e) {
                 console.error('加载记录失败', e)
             }
@@ -69,7 +69,7 @@ const Records: FC = () => {
     // 设置/取消收藏模板
     const handleSetTemplate = async (id: number, isTemplate: boolean) => {
         try {
-            await httpPut('/api/comment',{id,isTemplate })
+            await httpPut('/api/comment', { id, isTemplate })
             Taro.showToast({ title: isTemplate ? '已取消收藏' : '已收藏', icon: 'success' })
         } catch (e) {
             console.error('设置收藏状态失败', e)
@@ -109,7 +109,7 @@ const Records: FC = () => {
             {/* List */}
             <ScrollView className='list' scrollY>
                 {filtered.map((r) => (
-                    <View className='card' key={r.id ?? `${r.category}-${r.createdAt ?? r.content.slice(0, 20)}`}>
+                    <View className='card' key={r.id != null ? r.id : `${r.category}-${(r.createdAt != null ? r.createdAt : (r.content ? r.content.slice(0, 20) : ''))}`}>
                         <View className='card-head'>
                             <Text className='tag'>{r.categoryName || '未分类'}</Text>
                             <Text className='date'>{formatDate(r.createdAt)}</Text>
@@ -120,7 +120,7 @@ const Records: FC = () => {
                                 <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
                                 <Text className='copy-hint'>复制</Text>
                             </View>
-                            <Button onClick={() => handleSetTemplate(r.id , r.isTemplate)} className={`template-btn ${!r.isTemplate ? 'active' : ''}`}>
+                            <Button onClick={() => { if (typeof r.id === 'number') handleSetTemplate(r.id, !!r.isTemplate) }} className={`template-btn ${!r.isTemplate ? 'active' : ''}`}>
                                 {r.isTemplate ? '取消模板' : '设置为模板'}
                             </Button>
                         </View>

@@ -14,25 +14,26 @@ const AllCategory: FC = () => {
   const [categoryList, setCategoryList] = useState<ICategory[]>([])
 
 
-// useEffect(() => {
-//   if(Taro.getStorageSync('selectChild') && Taro.getStorageSync('selectChild').id){
-//     setSelectChild(Taro.getStorageSync('selectChild'))
-//   }
-// })
+  // useEffect(() => {
+  //   if(Taro.getStorageSync('selectChild') && Taro.getStorageSync('selectChild').id){
+  //     setSelectChild(Taro.getStorageSync('selectChild'))
+  //   }
+  // })
 
-useEffect(() => {
-  httpGet('/api/category').then(res => {
-    setParent(res[0]?.id)
-    setCategoryList(res|| [])
-  })
-}, [])
-// 加载时读取缓存，作为初始高亮，不触发返回
-useEffect(() => {
-  const cached = Taro.getStorageSync('selectChild') as ICategory | undefined
-  if (cached && cached.id) {
-    setSelectChild(cached)
-  }
-}, [])
+  useEffect(() => {
+    httpGet('/api/category').then(res => {
+      // setParent(res[0]?.id)
+      setParent(res && res[0] ? res[0].id : undefined)
+      setCategoryList(res || [])
+    })
+  }, [])
+  // 加载时读取缓存，作为初始高亮，不触发返回
+  useEffect(() => {
+    const cached = Taro.getStorageSync('selectChild') as ICategory | undefined
+    if (cached && cached.id) {
+      setSelectChild(cached)
+    }
+  }, [])
   // 左边的一级分类
   const parentList = useMemo(() => {
     return categoryList.filter(x => !x.parentId)
@@ -40,7 +41,9 @@ useEffect(() => {
 
   const secondList = useMemo(() => {
     // console.log(parent,categoryList)
-    return categoryList.find(x => x.id === parent)?.children || []
+    // return categoryList.find(x => x.id === parent)?.children || []
+    const found = categoryList.find(x => x.id === parent)
+    return found && found.children ? found.children : []
   }, [categoryList, parent])
 
   // 监听二级分类选中
@@ -48,13 +51,20 @@ useEffect(() => {
     if (!hasUserSelected) return
     if (!selectChild || !selectChild.id) return
     // 通过事件通道把选中的子分类回传给上一页
-    const ec = Taro.getCurrentInstance().page?.getOpenerEventChannel?.()
-    ec?.emit('selectChild:update', { ...selectChild })
+    // const ec = Taro.getCurrentInstance().page?.getOpenerEventChannel?.()
+    // ec?.emit('selectChild:update', { ...selectChild })
+    const inst = Taro.getCurrentInstance()
+    const ec = inst && inst.page && typeof (inst.page as any).getOpenerEventChannel === 'function'
+      ? (inst.page as any).getOpenerEventChannel()
+      : undefined
+    if (ec && typeof (ec as any).emit === 'function') {
+      (ec as any).emit('selectChild:update', { ...selectChild })
+    }
     // 返回上一页
     Taro.navigateBack({
       delta: 1,
     })
-  }, [hasUserSelected, selectChild?.id])
+  }, [hasUserSelected, selectChild ? selectChild.id : undefined])
   return (
     <View className='all-category-page'>
       {/* 搜索框 */}
@@ -113,10 +123,14 @@ useEffect(() => {
               {secondList.map((c, i) => (
                 <Button
                   key={c.id}
-                  className={`chip ${c.id === selectChild?.id ? 'active' : ''}`}
+                  className={`chip ${c.id === (selectChild ? selectChild.id : undefined) ? 'active' : ''}`}
                   onClick={() => { setSelectChild({ ...c }); setHasUserSelected(true); }}
                 >
                   {c.name}
+                  {/* 打上常用标签 */}
+                  {c.frequentlyUsed ? (
+                    <Text className='frequent-tag'>常用</Text>
+                  ) : null}
                 </Button>
               ))}
             </View>

@@ -19,12 +19,15 @@ export async function callLoginApi(code: string) {
         })
 
         if (response.statusCode === 200) {
-            return response.data.data
+            return (response as any).data && (response as any).data.data
         } else {
-            throw new Error(`登录失败: ${response.data?.message || '未知错误'}`)
+            const msg = response && (response as any).data && (response as any).data.message
+                ? (response as any).data.message
+                : '未知错误'
+            throw new Error(`登录失败: ${msg}`)
         }
     } catch (error: any) {
         console.error('登录API调用失败:', error)
-        throw new Error(error.message || '登录失败')
+        throw new Error(error && error.message ? error.message : '登录失败')
     }
 }
