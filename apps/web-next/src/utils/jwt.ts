@@ -1,7 +1,7 @@
 import jwt, { Secret, SignOptions } from 'jsonwebtoken'
 import { NextRequest } from 'next/server'
 import { ResponseCode, ResponseMessage } from '@/lib/response'
-const JWT_SECRET = (process.env.JWT_SECRET || 'your-jwt-secret-key') as Secret;
+const JWT_SECRET = (process.env.JWT_SECRET) as Secret;
 
 export interface JWTPayload {
     userId: string

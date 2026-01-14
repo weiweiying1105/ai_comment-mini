@@ -2,13 +2,15 @@ import { NextResponse, NextRequest } from "next/server";
 import { createJsonResponse, ResponseUtil } from "@/lib/response";
 import { verifyToken } from "@/utils/jwt";
 import prisma from "@/lib/prisma";
+
 export const dynamic = "force-dynamic"
 
-function buildPrompt(categoryName: string, words: number, reference?: string): string {
+function buildPrompt(categoryName: string, words: number, reference?: string,tone?:string): string {
     return `请根据以下信息写一段大众点评风格的走心好评文案，约 ${words} 字左右。
 - 关键词/主题/分类：${categoryName}
-- 重中之重：不要写具体的产品。多模拟客户感受，可以多写服务，环境，口味，性价比等。内容要完整，不要省略和缺失。
-- 要求：要贴地气，语言自然真实、包含具体细节（环境/服务/口味/性价比）， 如果关键词是大分类，就不要生成具体产品的内容了。就写的通用一点。适度使用 Emoji（不超过 4 个），避免夸张词与空洞形容。
+- 语气要求：${tone || '正常'}
+- 重中之重：必须严格遵循指定语气！不要写具体的产品。多模拟客户感受，可以多写服务，环境，口味，性价比等。内容要完整，不要省略和缺失。
+- 要求：要贴地气，语言自然真实、包含具体细节（环境/服务/口味/性价比）， 如果关键词是大分类，就不要生成具体产品的内容了。就写的通用一点。不使用Emoji，避免夸张词与空洞形容。
 - 比如：1) 场景与店铺亮点; 2) 具体体验细节; 3) 推荐菜/项目与理由; 4) 适合人群与小建议; 5) 温暖结尾与轻微召唤。等等，取一部分或者都取。
 - 参考文案：${reference || '无'}
 只输出成品文案。`
@@ -24,7 +26,7 @@ export async function POST(request: NextRequest) {
                 { status: 401 }
             );
         }
-        const { categoryName, categoryId, words, reference } = await request.json();
+        const { categoryName, categoryId, words, reference,tone } = await request.json();
         if (!categoryName || !categoryId || !words || typeof categoryName !== 'string' || typeof categoryId !== 'number' || typeof words !== 'number') {
             return createJsonResponse(
                 ResponseUtil.error('参数错误'),
@@ -47,11 +49,11 @@ export async function POST(request: NextRequest) {
                 {
                     role: 'system',
                     content:
-                        '你是资深大众点评文案策划，擅长写真实、具体、有温度的好评文案。输出纯文本，不要解释，不要加前后引号。',
+                        '你是资深大众点评文案策划，擅长写真实、具体、有温度的好评文案，能够根据不同需求调整语气风格。输出纯文本，不要解释，不要加前后引号。',
                 },
-                { role: 'user', content: buildPrompt(categoryName, targetWords, reference ?? '') },
+                { role: 'user', content: buildPrompt(categoryName, targetWords, reference ?? '',tone??'') },
             ],
-            temperature: 0.7,
+            temperature: 0.85, // 增加温度值以获得更有创意和多样化的语气表达
             // 将“字数”近似为 token 数上限；中文字符与 token 接近，英文粗略按 2 倍处理
             max_tokens: Math.min(2048, Math.max(128, Math.round(targetWords * 2))),
         }

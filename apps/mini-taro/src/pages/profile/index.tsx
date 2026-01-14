@@ -252,7 +252,7 @@ export default function ProfilePage() {
             </View>
             <Text className='chevron'>›</Text>
           </View>
-          <View className='menu-item'>
+          {/* <View className='menu-item'>
             <View className='menu-icon primary'>
               <Text className='icon'>◆</Text>
             </View>
@@ -261,7 +261,7 @@ export default function ProfilePage() {
               <Text className='upgrade-badge'>UPGRADE</Text>
             </View>
             <Text className='chevron'>›</Text>
-          </View>
+          </View> */}
         </View>
       </View>
 

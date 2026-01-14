@@ -6,16 +6,28 @@ import { httpGet, httpPost } from '@/utils/http'
 import { ICategory } from '../../../typings'
 // 4B5563  unactive
 // 111827  active
-
-const OPTION_TAGS = [
-  { key: 'warm', label: '语气更热情' },
-  { key: 'photo', label: '提到拍照好看' },
-  { key: 'value', label: '强调性价比' },
+// 语气
+const TONE_OPTION_TAGS = [
+  { key: 'sincere', label: '真诚推荐' },
+  { key: 'hot', label: '热情夸夸' },
+  { key: 'plain', label: '平实日常' },
+  { key: 'business', label: '商务理性' },
+  { key: 'humor', label: '幽默一点' },
+{ key: 'safe', label: '保守稳妥（不踩雷）' },
+]
+const defaultCategory = [
+  { id: 1, name: '美食' },
+  { id: 2, name: '饮品' },
+  { id: 3, name: '酒店' },
+  { id: 4, name: '娱乐' },
+  { id: 5, name: '美容' },
+  { id: 6, name: '亲子' },
+  { id: 7, name: '健身' },
 ]
 
 const Profile: FC = () => {
   const [category, setCategory] = useState<number>()
-  const [limit, setLimit] = useState(150)
+  const [limit, setLimit] = useState(Number(Taro.getStorageSync('limit') || 50))
   const [selectedOptions, setSelectedOptions] = useState<string[]>([])
   const [result, setResult] = useState('')
 
@@ -23,6 +35,10 @@ const Profile: FC = () => {
 
 
   const [selectedChild, setSelectedChild] = useState<ICategory | null>(Taro.getStorageSync('selectChild') || null)
+  // 监听limit变化，存到本地
+  useEffect(() => {
+    Taro.setStorageSync('limit', limit)
+  }, [limit])
   useEffect(() => {
     // console.log('selectedChild', selectedChild)
     if (selectedChild && selectedChild.id) {
@@ -33,7 +49,7 @@ const Profile: FC = () => {
 
   }, [selectedChild ? selectedChild.id : undefined])
 
-  const [categoryList, setCategoryList] = useState<ICategory[]>([])
+  const [categoryList, setCategoryList] = useState<ICategory[]>(defaultCategory)
   useEffect(() => {
     httpGet('/api/category').then(res => {
       // console.log(res)
@@ -46,6 +62,10 @@ const Profile: FC = () => {
   const handleToggleOption = (key: string) => {
     setSelectedOptions(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key])
   }
+  const toneLabel = useMemo(() => {
+    const toneOptions = TONE_OPTION_TAGS.filter(tag => selectedOptions.includes(tag.key))
+    return toneOptions.map(tag => tag.label).join('、') || ''
+  }, [selectedOptions])
 
   const hintText = useMemo(() => {
     return '点击下方按钮，生成在大众点评上的完美好评…'
@@ -59,6 +79,7 @@ const Profile: FC = () => {
       words: limit,
       categoryName: (selectedChild && selectedChild.name) ? selectedChild.name : catLabel,
       categoryId: (selectedChild && selectedChild.id) ? selectedChild.id : category,
+      tone:toneLabel
     }).then(res => {
       console.log(res)
       setResult(res.text)
@@ -137,9 +158,9 @@ const Profile: FC = () => {
           <Slider
             min={50}
             max={300}
-            step={1}
-            activeColor='rgb(249 245 6)'
-            blockColor='rgb(249 245 6)'
+            step={10}
+            activeColor='#ffd400'
+            blockColor='#ffd400'
             value={limit}
             onChange={(e) => setLimit(Number(e.detail.value))}
 
@@ -169,8 +190,8 @@ const Profile: FC = () => {
           </View>
         </View>
 
-        {/* <View className='options'>
-        {OPTION_TAGS.map(opt => (
+         <View className='options'>
+        {TONE_OPTION_TAGS.map(opt => (
           <View
             key={opt.key}
             className={`option-tag ${selectedOptions.includes(opt.key) ? 'checked' : ''}`}
@@ -179,7 +200,7 @@ const Profile: FC = () => {
             <Text>{opt.label}</Text>
           </View>
         ))}
-      </View> */}
+      </View> 
 
         <View className='footer'>
           <Button className='generate-btn' onClick={buildReview}>✨ 生成好评</Button>

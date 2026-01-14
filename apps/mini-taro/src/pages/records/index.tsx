@@ -70,7 +70,8 @@ const Records: FC = () => {
     const handleSetTemplate = async (id: number, isTemplate: boolean) => {
         try {
             await httpPut('/api/comment', { id, isTemplate })
-            Taro.showToast({ title: isTemplate ? '已取消收藏' : '已收藏', icon: 'success' })
+            setRecords(records.map(r => r.id === id ? { ...r, isTemplate: !isTemplate } : r))
+            Taro.showToast({ title: isTemplate ? '已取消收藏' : '已收藏', icon: 'none' })
         } catch (e) {
             console.error('设置收藏状态失败', e)
             Taro.showToast({ title: '操作失败', icon: 'none' })

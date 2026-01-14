@@ -81,9 +81,12 @@ const Templates: FC = () => {
     }
 
     // 取消收藏模板
-    const handleUnsetTemplate = async (id: number) => {
+    const handleUnsetTemplate = async (id: number,index:number) => {
         try {
             await httpPut('/api/comment', { id, isTemplate: false })
+            // 更新当前模板状态,把当前模板从数组中移除
+            setTemplates(prev => prev.slice(0,index).concat(prev.slice(index+1)))
+
             Taro.showToast({ title: '已取消收藏', icon: 'success' })
             // 更新本地模板列表
             setTemplates(prev => prev.filter(t => t.id !== id))
@@ -127,6 +130,10 @@ const Templates: FC = () => {
                 categoryName: template.categoryName,
                 categoryId: template.category,
                 reference: template.content,
+                tone: selectedOptions.map(optKey => {
+                    const opt = OPTION_TAGS.find(opt => opt.key === optKey)
+                    return opt ? opt.label : ''
+                }).filter(Boolean).join('、')
             })
 
             setRegenerateResult(res.text)
@@ -151,6 +158,7 @@ const Templates: FC = () => {
                 Taro.showToast({ title: '复制失败', icon: 'none' })
             })
     }
+  
 
     return (
         <>
@@ -184,7 +192,7 @@ const Templates: FC = () => {
 
                 {/* List */}
                 <ScrollView className='list' scrollY>
-                    {filtered.map((r) => (
+                    {filtered.map((r,index) => (
                         <View
                             className='card'
                             key={r.id != null ? r.id : `${r.category}-${(r.createdAt != null ? r.createdAt : (r.content ? r.content.slice(0, 20) : ''))}`}
@@ -200,8 +208,8 @@ const Templates: FC = () => {
                                         <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
                                         <Text className='copy-hint'>复制</Text>
                                     </View>
-                                    <View className='copy-btn' onClick={() => handleCopy(r.content)}>
-                                        <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
+                                    <View className='copy-btn' onClick={() => handleUnsetTemplate(r.id,index)}>
+                                        <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1768368201/collect_pxftkb.png"></Image>
                                         <Text className='copy-hint'>取消收藏</Text>
                                     </View>
                                 </View>
@@ -252,22 +260,22 @@ const Templates: FC = () => {
                         </View>
 
                         {/* 生成选项 */}
-                        {/* <View className='modal-section'>
-                        <View className='section-header'>
-                            <View className='section-title'>生成选项</View>
+                        <View className='modal-section'>
+                            <View className='section-header'>
+                                <View className='section-title'>生成选项</View>
+                            </View>
+                            <View className='options'>
+                                {OPTION_TAGS.map(opt => (
+                                    <View
+                                        key={opt.key}
+                                        className={`option-tag ${selectedOptions.includes(opt.key) ? 'checked' : ''}`}
+                                        onClick={() => handleToggleOption(opt.key)}
+                                    >
+                                        <Text>{opt.label}</Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
-                        <View className='options'>
-                            {OPTION_TAGS.map(opt => (
-                                <View
-                                    key={opt.key}
-                                    className={`option-tag ${selectedOptions.includes(opt.key) ? 'checked' : ''}`}
-                                    onClick={() => handleToggleOption(opt.key)}
-                                >
-                                    <Text>{opt.label}</Text>
-                                </View>
-                            ))}
-                        </View>
-                    </View> */}
 
                         {/* 生成结果 */}
                         <View className='modal-section'>
