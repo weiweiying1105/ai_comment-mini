@@ -1,31 +1,31 @@
-# 使用 Node.js 18 作为基础镜像
-FROM node:18-alpine AS base
-FROM node:20-bullseye
-
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# 先拷贝 package.json
-COPY package*.json ./
+# 1. 先拷贝 workspace 相关文件
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# 安装依赖（不会再触发 prisma）
-RUN npm ci
+# 2. 启用 pnpm
+RUN corepack enable
 
-# 再拷贝完整源码（包括 prisma/schema.prisma）
-COPY . .
+# 3. 安装全部依赖
+RUN pnpm install --frozen-lockfile
 
-# 显式执行 prisma generate
-RUN npx prisma generate
+# 4. 再拷贝源码
+COPY apps ./apps
 
-# 构建 NestJS
-RUN npm run build
+# 5. 构建指定子项目
+WORKDIR /app/apps/web-next
+RUN pnpm build
 
-# 设置环境变量
+# =========================
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+
 ENV NODE_ENV=production
-ENV PORT=8000
 
-# 暴露端口
-EXPOSE 8000
+COPY --from=builder /app/apps/web-next ./
 
-CMD ["node", ".next/standalone/server.js"]
-
+EXPOSE 3000
+CMD ["pnpm", "start"]
