@@ -9,7 +9,7 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # 拷贝子项目 package.json（让 pnpm 识别 workspace）
-COPY apps/web-next/package.json apps/web-next/package.json
+COPY apps/web-next/package.json ./apps/web-next/package.json
 
 # 安装 workspace 依赖
 RUN pnpm install --frozen-lockfile
@@ -31,10 +31,16 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# 拷贝子项目到运行镜像
-COPY --from=builder /app/apps/web-next ./
+# 拷贝构建结果到运行镜像
+COPY --from=builder /app/apps/web-next/.next ./.next
+COPY --from=builder /app/apps/web-next/public ./public
+COPY --from=builder /app/apps/web-next/package.json ./package.json
+COPY --from=builder /app/apps/web-next/next.config.ts ./next.config.ts
 
-EXPOSE 8000
+# 安装生产依赖
+RUN pnpm install --prod --frozen-lockfile
 
-# 运行（确保 apps/web-next/package.json 里有 start 脚本）
+EXPOSE 3000
+
+# 运行
 CMD ["pnpm", "start"]
