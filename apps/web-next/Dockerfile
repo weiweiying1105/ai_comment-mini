@@ -3,8 +3,6 @@ WORKDIR /app
 
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
-# 如果仓库有 .npmrc，一定要拷（可能包含 node-linker 配置）
-COPY .npmrc ./
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web-next/package.json apps/web-next/package.json
