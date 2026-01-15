@@ -1,41 +1,40 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+**/node_modules
+**/.pnpm-store
+**/.pnp.*
+**/.yarn
+**/.npm
 
-# testing
-/coverage
+# build outputs
+**/.next
+**/dist
+**/build
+**/.turbo
+**/.cache
 
-# next.js
-/.next/
-/out/
+# vcs
+**/.git
+**/.gitignore
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# logs
+**/*.log
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env & secrets
+.env
+.env.*
+**/*.pem
+**/*.key
 
-# vercel
-.vercel
+# OS / editor
+**/.DS_Store
+**/Thumbs.db
+**/.idea
+**/.vscode
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# misc large folders (按你项目情况可删)
+**/.swc
+**/.vercel
