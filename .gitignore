@@ -1,3 +1,4 @@
 /node_modules
 /apps/web-next/node_modules
-/apps/mini-taro/node_modules
+/apps/mini-tar/node_modules
+.env-production
