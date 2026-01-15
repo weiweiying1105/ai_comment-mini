@@ -10,11 +10,6 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web-next/package.json apps/web-next/package.json
 
-# 设置环境变量以帮助Prisma识别OpenSSL版本
-ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
-ENV PRISMA_QUERY_ENGINE_BINARY_TARGET=linux-musl
-ENV PRISMA_QUERY_ENGINE_TYPE=binary
-
 # 关键：强制生成 node_modules
 RUN pnpm config set node-linker hoisted
 RUN pnpm install 
@@ -30,7 +25,8 @@ COPY . .
 # 生成适用于Linux环境的Prisma客户端
 RUN pnpm --filter web-next prisma generate
 # 构建应用
-RUN pnpm --filter web-next build
+RUN pnpm --filter web-next prisma generate
+
 # 确保Prisma引擎文件被复制到Next.js输出目录
 RUN ls -la node_modules/@prisma/engines/
 RUN cp -r node_modules/@prisma/engines/* apps/web-next/.next/server/ || echo "Engines not found in expected location"
@@ -42,7 +38,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # 安装必要的系统库以支持Prisma引擎
-RUN apk add --no-cache openssl-dev libc6-compat
+RUN apk add --no-cache openssl libc6-compat
 
 # 设置环境变量以帮助Prisma识别OpenSSL版本
 ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
