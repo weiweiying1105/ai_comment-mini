@@ -21,7 +21,12 @@ COPY . .
 
 # 生成适用于Linux环境的Prisma客户端
 RUN pnpm --filter web-next prisma generate
+# 构建应用
 RUN pnpm --filter web-next build
+# 确保Prisma引擎文件被复制到Next.js输出目录
+RUN ls -la node_modules/@prisma/engines/
+RUN cp -r node_modules/@prisma/engines/* apps/web-next/.next/server/ || echo "Engines not found in expected location"
+RUN ls -la apps/web-next/.next/server/ || echo "Server dir not found"
 
 
 FROM node:20-alpine AS runner
