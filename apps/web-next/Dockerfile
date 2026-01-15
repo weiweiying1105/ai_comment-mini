@@ -1,11 +1,19 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 
+# 安装必要的系统库以支持Prisma引擎
+RUN apk add --no-cache openssl-dev libc6-compat
+
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web-next/package.json apps/web-next/package.json
+
+# 设置环境变量以帮助Prisma识别OpenSSL版本
+ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_TYPE=binary
 
 # 关键：强制生成 node_modules
 RUN pnpm config set node-linker hoisted
@@ -35,6 +43,11 @@ ENV NODE_ENV=production
 
 # 安装必要的系统库以支持Prisma引擎
 RUN apk add --no-cache openssl-dev libc6-compat
+
+# 设置环境变量以帮助Prisma识别OpenSSL版本
+ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_TYPE=binary
 
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
