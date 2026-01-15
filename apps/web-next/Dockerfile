@@ -34,7 +34,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # 安装必要的系统库以支持Prisma引擎
-RUN apk add --no-cache openssl1.1-compat libc6-compat
+RUN apk add --no-cache openssl-dev libc6-compat
 
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
