@@ -30,10 +30,8 @@ enum ResponseCode {
 }
 
 // 基础配置
-const BASE_URL = (typeof process !== 'undefined' && (process as any).env && (process as any).env.BASE_URL)
-    ? (process as any).env.BASE_URL
-    : 'http://localhost:3000'
-
+const BASE_URL =  (process as any).env.BASE_URL;
+console.log('@@@BASE_URL:', BASE_URL,(process as any).env.BASE_URL)
 const DEFAULT_TIMEOUT = 30000
 let token = Taro.getStorageSync('token') || ''
 // Token刷新状态管理
@@ -86,7 +84,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
 
     try {
         const response = await Taro.request({
-            url: `${BASE_URL}/app2${config.url}`,
+            url: `${BASE_URL}${config.url}`,
             method: config.method || 'GET',
             data: config.data,
             header,

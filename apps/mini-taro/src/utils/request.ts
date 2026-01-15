@@ -30,9 +30,7 @@ enum ResponseCode {
 }
 
 // 基础配置
-const BASE_URL = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/api'
-    : 'https://www.wwycoding.com/api'
+const BASE_URL =  process.env.BASE_URL;
 
 const DEFAULT_TIMEOUT = 30000
 let token = Taro.getStorageSync('token') || ''

@@ -241,7 +241,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 5.22.0
-   * Query Engine version: acc0b9dd43eb689cbd20c9470515d719db10d0b0
+   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
    */
   export type PrismaVersion = {
     client: string
@@ -2087,7 +2087,6 @@ export namespace Prisma {
      * Filter which Users to update
      */
     where?: UserWhereInput
-    limit?: number
   }
 
   /**
@@ -2142,7 +2141,6 @@ export namespace Prisma {
      * Filter which Users to delete
      */
     where?: UserWhereInput
-    limit?: number
   }
 
   /**
@@ -3127,7 +3125,6 @@ export namespace Prisma {
      * Filter which Categories to update
      */
     where?: CategoryWhereInput
-    limit?: number
   }
 
   /**
@@ -3182,7 +3179,6 @@ export namespace Prisma {
      * Filter which Categories to delete
      */
     where?: CategoryWhereInput
-    limit?: number
   }
 
   /**
@@ -4194,7 +4190,6 @@ export namespace Prisma {
      * Filter which GoodComments to update
      */
     where?: GoodCommentWhereInput
-    limit?: number
   }
 
   /**
@@ -4249,7 +4244,6 @@ export namespace Prisma {
      * Filter which GoodComments to delete
      */
     where?: GoodCommentWhereInput
-    limit?: number
   }
 
   /**
@@ -4626,8 +4620,8 @@ export namespace Prisma {
     userId?: StringFilter<"GoodComment"> | string
     limit?: IntFilter<"GoodComment"> | number
     isTemplate?: BoolFilter<"GoodComment"> | boolean
-    categoryCategory?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    categoryCategory?: XOR<CategoryRelationFilter, CategoryWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
   export type GoodCommentOrderByWithRelationInput = {
@@ -4659,8 +4653,8 @@ export namespace Prisma {
     userId?: StringFilter<"GoodComment"> | string
     limit?: IntFilter<"GoodComment"> | number
     isTemplate?: BoolFilter<"GoodComment"> | boolean
-    categoryCategory?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    categoryCategory?: XOR<CategoryRelationFilter, CategoryWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id">
 
   export type GoodCommentOrderByWithAggregationInput = {
@@ -5273,12 +5267,12 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type CategoryScalarRelationFilter = {
+  export type CategoryRelationFilter = {
     is?: CategoryWhereInput
     isNot?: CategoryWhereInput
   }
 
-  export type UserScalarRelationFilter = {
+  export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
   }

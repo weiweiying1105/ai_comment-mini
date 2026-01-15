@@ -21,6 +21,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       "@tarojs/plugin-generator"
     ],
     defineConstants: {
+      'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL || (mode === 'production' ? 'https://ai.wwycoding.com' : 'http://localhost:3000'))
     },
     copy: {
       patterns: [
