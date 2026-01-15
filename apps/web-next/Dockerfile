@@ -33,6 +33,9 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+# 安装必要的系统库以支持Prisma引擎
+RUN apk add --no-cache openssl1.1-compat libc6-compat
+
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 # 只拷贝运行需要的文件
