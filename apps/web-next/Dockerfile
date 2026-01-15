@@ -19,6 +19,8 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 
+# 生成适用于Linux环境的Prisma客户端
+RUN pnpm --filter web-next prisma generate
 RUN pnpm --filter web-next build
 
 
@@ -32,10 +34,7 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 COPY --from=builder /app/apps/web-next/.next ./.next
 COPY --from=builder /app/apps/web-next/public ./public
 COPY --from=builder /app/apps/web-next/package.json ./package.json
-
-# 生产依赖（同样强制 node_modules）
-RUN pnpm config set node-linker hoisted
-RUN pnpm install --prod 
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 8000
 CMD ["pnpm", "start"]
