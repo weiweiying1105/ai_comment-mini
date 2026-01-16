@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.6
+
 
 FROM node:20-alpine AS deps
 WORKDIR /app
@@ -12,8 +12,9 @@ COPY apps/web-next/package.json apps/web-next/package.json
 
 # 安装依赖：尽量离线优先 + 缓存 pnpm store
 RUN pnpm config set node-linker hoisted
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
-    pnpm --filter web-next... install --frozen-lockfile --prefer-offline
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store 
+RUN pnpm --filter web-next... install --frozen-lockfile --prefer-offline
+
 
 FROM node:20-alpine AS builder
 WORKDIR /app
