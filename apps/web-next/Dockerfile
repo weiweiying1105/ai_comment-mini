@@ -2,45 +2,60 @@
 
 FROM node:20-alpine AS deps
 WORKDIR /app
-RUN apk add --no-cache openssl libc6-compat
-ENV CI=true
+
+# 安装必要的系统库以支持Prisma引擎
+RUN apk add --no-cache openssl-dev libc6-compat
+
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
-# 只拷贝依赖相关文件，最大化缓存命中
+# 设置环境变量以帮助Prisma识别OpenSSL版本
+ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_TYPE=binary
+
+# 预先安装依赖以利用Docker缓存
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web-next/package.json apps/web-next/package.json
 
-# 安装依赖：尽量离线优先 + 缓存 pnpm store
+# 关键：强制生成 node_modules
 RUN pnpm config set node-linker hoisted
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store 
-RUN pnpm --filter web-next... install --frozen-lockfile --prefer-offline
+RUN pnpm install --frozen-lockfile
 
 
 FROM node:20-alpine AS builder
 WORKDIR /app
-RUN apk add --no-cache openssl libc6-compat
-ENV CI=true
+
+# 安装必要的系统库以支持Prisma引擎
+RUN apk add --no-cache openssl-dev libc6-compat
+
+# 设置环境变量以帮助Prisma识别OpenSSL版本
+ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_TYPE=binary
+
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
-
 COPY --from=deps /app/node_modules /app/node_modules
-
-# 这里会导致缓存失效，但必须拷源码；靠 .dockerignore 把体积压下去
 COPY . .
 
-# 进入子项目构建，确保 .next 生成位置固定
-WORKDIR /app/apps/web-next
-
-# Prisma：务必在 schema.prisma 里加 binaryTargets（见下文②）
-RUN pnpm prisma generate
-
-# Next build：产出 standalone
-RUN pnpm build
+# 确保在构建前再次运行prisma generate
+RUN cd apps/web-next && pnpm prisma generate
+RUN cd apps/web-next && pnpm build
+RUN ls -la apps/web-next/.next
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8000
-RUN apk add --no-cache openssl libc6-compat
+
+# 安装必要的系统库以支持Prisma引擎
+RUN apk add --no-cache openssl-dev libc6-compat
+
+# 设置环境变量以帮助Prisma识别OpenSSL版本
+ENV PRISMA_SCHEMA_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_BINARY_TARGET=linux-musl
+ENV PRISMA_QUERY_ENGINE_TYPE=binary
+
+RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 # 只带 runtime 需要的最小产物
 COPY --from=builder /app/apps/web-next/.next/standalone ./
@@ -48,7 +63,7 @@ COPY --from=builder /app/apps/web-next/.next/static ./.next/static
 COPY --from=builder /app/apps/web-next/public ./public
 
 EXPOSE 8000
-CMD ["node", "server.js"]
+CMD ["node", "apps/web-next/.next/server.js"]
 
 # 目标目录：/
 
