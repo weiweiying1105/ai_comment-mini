@@ -63,7 +63,7 @@ COPY --from=builder /app/apps/web-next/.next/static ./.next/static
 COPY --from=builder /app/apps/web-next/public ./public
 
 EXPOSE 8000
-CMD ["node", "apps/web-next/.next/server.js"]
+CMD ["node", "apps/web-next/.next/standalone/server.js"]
 
 # 目标目录：/
 
