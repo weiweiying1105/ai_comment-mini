@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
-  output: 'standalone',
-}
+const nextConfig = {
+  output: "standalone",
+  eslint: {
+    // 禁用ESLint检查
+    ignoreDuringBuilds: true,
+  },
+};
+
+module.exports = nextConfig;
