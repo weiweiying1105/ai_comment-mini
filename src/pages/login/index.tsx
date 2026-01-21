@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from 'react'
 import './index.scss'
 import { callLoginApi } from '@/api'
 import { EVENT_NAMES, eventBus } from '@/utils/eventBus'
-
+const LOGO_URL = 'https://6169-ai-accounting-5gprth66e60400be-1303796882.cos.ap-shanghai.myqcloud.com/ai-comment/ChatGPT%20Image%202026%E5%B9%B41%E6%9C%8821%E6%97%A5%2016_01_16.png'
 export default function LoginPage() {
   const [agree, setAgree] = useState(false)
 
   const logoStyle = useMemo(() => ({
-    backgroundImage: `url(https://picsum.photos/200)`,
+    backgroundImage: `url(${LOGO_URL})`,
   }), [])
 
 
@@ -123,9 +123,9 @@ export default function LoginPage() {
             >
               <Text className='terms-text'>
                 我已阅读并同意
-                <Text className='link'>《用户协议》</Text>
+                <Text className='link' onClick={() => Taro.navigateTo({ url: '/pages/user-agreement/index' })}>《用户协议》</Text>
                 和
-                <Text className='link'>《隐私政策》</Text>
+                <Text className='link' onClick={() => Taro.navigateTo({ url: '/pages/privacy-policy/index' })}>《隐私政策》</Text>
               </Text>
             </Checkbox>
           </CheckboxGroup>
@@ -138,7 +138,7 @@ export default function LoginPage() {
             className={`login-btn ${agree ? 'active' : 'disabled'}`}
             onClick={handleWxLogin}
           >
-            <Text className='btn-icon'>💬</Text>
+            {/* <Text className='btn-icon'>💬</Text> */}
             <Text className='btn-text'>微信一键登录</Text>
           </Button>
         </View>

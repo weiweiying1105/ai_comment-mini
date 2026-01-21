@@ -6,19 +6,19 @@ const UserAgreement: React.FC = () => {
   return (
     <View className='agreement-container'>
       <ScrollView className='agreement-content'>
-        <Text className='agreement-title'>用户协议</Text>
+        <View className='agreement-title'>用户协议</View>
         
-        <Text className='agreement-section-title'>1. 协议的接受</Text>
+        <View className='agreement-section-title'>1. 协议的接受</View>
         <Text className='agreement-text'>
-          欢迎使用AI帮我记应用（以下简称"本应用"）。本协议是您与本应用之间关于使用本应用服务的法律协议。
-        </Text>
+          欢迎使用好评生成助手应用（以下简称"本应用"）。本协议是您与本应用之间关于使用本应用服务的法律协议。
+        </Text><br/>
         <Text className='agreement-text'>
           您在使用本应用前，请仔细阅读并理解本协议的所有条款。一旦您使用本应用，即表示您同意接受本协议的全部条款。
-        </Text>
+        </Text><br/>
         
         <Text className='agreement-section-title'>2. 服务内容</Text>
         <Text className='agreement-text'>
-          本应用为您提供个人记账、消费统计、数据分析等服务。我们有权根据业务发展需要调整服务内容。
+          本应用为您提供好评生成、模板管理、历史记录等服务。我们有权根据业务发展需要调整服务内容。
         </Text>
         
         <Text className='agreement-section-title'>3. 用户权利和义务</Text>

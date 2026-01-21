@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "mini-taro",
   "description": "ai生成大众点评好评",
-  "appid": "wxa585c2c210b75c38",
+  "appid": "wxb557c920cf81c300",
   "setting": {
     "urlCheck": true,
     "es6": true,

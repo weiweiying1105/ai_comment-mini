@@ -8,7 +8,8 @@ interface UserInfo {
   nickName: string,
   id: string
 }
-const AVATAR_URL = 'https://picsum.photos/200'
+// 默认头像
+const AVATAR_URL = 'https://6169-ai-accounting-5gprth66e60400be-1303796882.cos.ap-shanghai.myqcloud.com/ai-comment/ScreenShot_2026-01-21_160803_885.png'
   // Cloudinary配置
 const CLOUDINARY_CONFIG = {
   cloud_name: "dc6wdjxld",
@@ -19,6 +20,8 @@ const CLOUDINARY_CONFIG = {
 export default function ProfilePage() {
   const avatarStyle = useMemo(() => ({
     backgroundImage: `url(${AVATAR_URL})`,
+    border: '2px solid #ffd400',
+    borderRadius: '50%',
   }), [])
   const [user, setUser] = useState<{
     avatarUrl: string,
@@ -108,7 +111,7 @@ export default function ProfilePage() {
       // 更新头像URL
       setUser(prev => {
         // 更新本地存储
-        Taro.setStorageSync('user', {
+        Taro.setStorageSync('userInfo', {
           ...prev,
           avatarUrl: uploadResult
         });
@@ -169,7 +172,7 @@ export default function ProfilePage() {
     }
    const res = await httpPut('/api/user/info', updatedUser)
   console.log('更新用户信息成功:',res)
-    Taro.setStorageSync('user', updatedUser)
+    Taro.setStorageSync('userInfo', updatedUser)
 
     Taro.showToast({
       title: '保存成功',
@@ -192,7 +195,6 @@ export default function ProfilePage() {
       {/* Profile Section */}
       <View className='profile-section'>
         <View className='avatar-wrap'>
-          {/* <View className='avatar' style={avatarStyle} /> */}
 
           <Button
             className='avatar-btn'

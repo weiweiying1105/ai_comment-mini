@@ -10,7 +10,7 @@ const PrivacyPolicy: React.FC = () => {
         
         <Text className='policy-section-title'>1. 引言</Text>
         <Text className='policy-text'>
-          欢迎使用AI帮我记应用（以下简称"本应用"）。我们非常重视您的隐私保护和个人信息安全。本隐私政策旨在向您说明我们在收集、使用、存储和保护您的个人信息方面的做法，请您仔细阅读。
+          欢迎使用好评生成助手应用（以下简称"本应用"）。我们非常重视您的隐私保护和个人信息安全。本隐私政策旨在向您说明我们在收集、使用、存储和保护您的个人信息方面的做法，请您仔细阅读。
         </Text>
         
         <Text className='policy-section-title'>2. 我们收集的信息</Text>
@@ -18,7 +18,7 @@ const PrivacyPolicy: React.FC = () => {
           2.1 注册信息：当您注册或登录本应用时，我们会收集您的微信头像、昵称等信息。
         </Text>
         <Text className='policy-text'>
-          2.2 使用信息：我们会收集您使用本应用的相关信息，包括但不限于记账记录、消费习惯等。
+          2.2 使用信息：我们会收集您使用本应用的相关信息，包括但不限于生成的好评内容、使用的模板、分类选择等。
         </Text>
         <Text className='policy-text'>
           2.3 设备信息：为了保障应用的正常运行，我们可能会收集您的设备型号、操作系统版本等信息。
@@ -26,7 +26,7 @@ const PrivacyPolicy: React.FC = () => {
         
         <Text className='policy-section-title'>3. 信息的使用</Text>
         <Text className='policy-text'>
-          3.1 提供服务：我们使用您的个人信息为您提供记账、统计分析等核心功能。
+          3.1 提供服务：我们使用您的个人信息为您提供好评生成、模板管理、历史记录等核心功能。
         </Text>
         <Text className='policy-text'>
           3.2 改进服务：我们会根据您的使用情况不断改进和优化应用功能。

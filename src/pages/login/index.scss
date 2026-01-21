@@ -30,8 +30,8 @@
   border-radius: 50%;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 24rpx 48rpx rgba(255, 212, 0, 0.2);
-  border: 16rpx solid #fff;
+  // box-shadow: 0 24rpx 48rpx rgba(255, 212, 0, 0.2);
+  // border: 16rpx solid #fff;
 }
 
 .brand-text { display: flex; flex-direction: column; align-items: center; gap: 16rpx; }
@@ -53,8 +53,11 @@
 }
 
 .terms { display: flex; align-items: center; justify-content: center; gap: 20rpx; }
-.terms-checkbox {  width: 100%; height: 40rpx; display: inline-block;}
-.terms-text { font-size: 24rpx; color: #64748b; display: inline-block;height: 40rpx;line-height: 40px;}
+.terms-checkbox {  width: 100%; height: 40rpx;gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;}
+.terms-text { font-size: 28rpx; color: #64748b; display: inline-block;height: 40rpx;line-height: 40px;}
 .link { color: #1f2937; font-weight: 600; text-decoration: underline; text-decoration-color: rgba(255,212,0,0.5); text-underline-offset: 4rpx; }
 
 .login-btn-wrap { display: flex; justify-content: center; width: 100%; margin-top: 16rpx; }

@@ -54,6 +54,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
     }
 
     if (token) {
+        console.log('token:', token)
         header.Authorization = `Bearer ${token}`
     } else {
         try {
@@ -237,6 +238,7 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
             if (refreshResponse.statusCode === 200) {
                 const newToken = refreshResponse.data.data.token
                 Taro.setStorageSync('token', newToken);
+                debugger;
                 refreshFailed = false; // 刷新成功，重置失败标记
                 // 重新发送队列中的所有请求
                 requestQueue.forEach(callback => callback())
