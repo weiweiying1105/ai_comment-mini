@@ -1,5 +1,5 @@
 .profile-page {
-  padding: 32rpx;
+  padding: 12rpx 32rpx 80rpx;
   background: #fff;
   min-height: 100vh;
 }
@@ -69,8 +69,8 @@
 }
 
 .icon-circle {
-  width: 112rpx;
-  height: 112rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 999px;
   display: flex;
   align-items: center;
@@ -113,19 +113,22 @@
 }
 
 .result-box {
-  background: #f7f8fa;
+  background-color: rgb(248 248 245);
   border-radius: 48rpx;
-  padding: 24rpx;
+  // padding: 12rpx;
+  box-sizing: border-box;
 }
 
 .result-textarea {
+  box-sizing: border-box;
   min-height: 280rpx;
   font-size: 28rpx;
-  padding: 16rpx;
+  padding: 32rpx;
   width: 100%;
   line-height: 42rpx;
   background-color: rgb(248 248 245);
   border-radius: 48rpx;
+  position: static;
 }
 
 .copy-btn {
@@ -136,6 +139,8 @@
   font-size: 28rpx;
   color: #ffd400;
   padding: 20rpx;
+  // position: fixed;
+  // width: 100%;
 
   .copy-icon {
     width: 24rpx;
@@ -172,8 +177,15 @@
 }
 
 .footer {
-  position: sticky;
+  position: fixed;
   bottom: 24rpx;
+  z-index: 999;
+  // background: #fff;
+  padding: 0 24rpx 30rpx;
+  left: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  width: 100vw;
 }
 
 .generate-btn {

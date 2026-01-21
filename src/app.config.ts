@@ -17,7 +17,7 @@ export default defineAppConfig({
     list: [
       {
         pagePath: 'pages/index/index',
-        text: '首页',
+        text: '一键生成',
         // 图标需使用本地相对路径，建议放在 src/assets/
         iconPath: 'assets/tab-profile.png',
         selectedIconPath: 'assets/tab-profile-active.png'
