@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/login/index",
-          "pathName": "pages/login/index",
+          "name": "pages/proCreate/index",
+          "pathName": "pages/proCreate/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/login/index",
+          "pathName": "pages/login/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

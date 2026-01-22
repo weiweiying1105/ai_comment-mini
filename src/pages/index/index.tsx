@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { View, Text, Button, Slider, Textarea, Image } from '@tarojs/components'
+import { View, Text, Button, Slider, Textarea, Image, ScrollView } from '@tarojs/components'
 import './index.scss'
 import Taro, { useRouter, useDidShow } from '@tarojs/taro'
 import { httpGet, httpPost } from '@/utils/http'
@@ -7,6 +7,9 @@ import { ICategory } from '../../../typings'
 // 4B5563  unactive
 // 111827  active
 // 语气
+const BASE_URL = (typeof process !== 'undefined' && (process as any).env && (process as any).env.BASE_URL)
+        ? (process as any).env.BASE_URL
+        : 'http://localhost:3000'
 const TONE_OPTION_TAGS = [
   { key: 'sincere', label: '真诚推荐' },
   { key: 'hot', label: '热情夸夸' },
@@ -68,9 +71,32 @@ const Profile: FC = () => {
   }, [selectedOptions])
 
   const hintText = useMemo(() => {
-    return '点击下方按钮，生成在大众点评上的完美好评…'
+    return '点击下方按钮，可一键生成好评'
   }, [])
 
+  const [keyword, setKeyword] = useState('')
+  const [images,setImages] = useState<string[]>([])
+  
+  const handleUpload = async () => {
+    const res = await Taro.chooseImage({
+      count: 1,
+      success: (res) => {
+        Taro.uploadFile({
+          url:BASE_URL+'/api/upload',
+          filePath:res.tempFilePaths[0],
+          name:'file',
+          success:(res) => {
+            console.log('上传成功',res)
+            const result = JSON.parse(res.data)
+            if(result && result.data && result.data.url) {
+              setImages([...images,result.data.url])
+            }
+          }
+        })
+      }
+    })
+  }
+  
   const buildReview = () => {
     console.log('buildReview', selectedChild)
     const found = categoryList.find(c => c.id === category)
@@ -79,7 +105,9 @@ const Profile: FC = () => {
       words: limit,
       categoryName: (selectedChild && selectedChild.name) ? selectedChild.name : catLabel,
       categoryId: (selectedChild && selectedChild.id) ? selectedChild.id : category,
-      tone:toneLabel
+      tone: toneLabel,
+      keyword: keyword,
+      images: images
     }).then(res => {
       console.log(res)
       setResult(res.text)
@@ -169,6 +197,60 @@ const Profile: FC = () => {
 
         <View className='section'>
           <View className='section-header'>
+            <View className='section-title'>评价细节</View>
+          </View>
+          
+          {/* 横向图片列表 + 添加按钮 */}
+          <ScrollView
+            scrollX
+            className='ai-image-list'
+            showScrollbar={false}
+          >
+            {images.map((url, index) => (
+              <View className='ai-image-list__inner' key={index}>
+                <View className='ai-image ai-image--large'>
+                  <Image
+                    className='ai-image__img'
+                    src={url}
+                    mode='aspectFill'
+                  />
+                  <View 
+                    className='ai-image__close ai-image__close--round'
+                    onClick={() => setImages(images.filter((_, i) => i !== index))}
+                  >
+                    <Text className='ai-image__close-text'>×</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+            
+            {/* 添加图片按钮 */}
+            <View className='ai-image-add' onClick={handleUpload}>
+              <Image 
+                className='ai-image-add__icon' 
+                src='https://ai-comment-1303796882.cos.ap-shanghai.myqcloud.com/uploads/1769071844937-356dd2c701e09.png' 
+                mode='aspectFill' 
+              />
+            </View>
+          </ScrollView>
+
+          {/* 关键词输入 */}
+          <View className='keyword-input'>
+            <Text className='keyword-label'>关键词</Text>
+            <Textarea
+              className='keyword-textarea'
+              placeholder='输入关键词，比如"番茄炒蛋"，"米其林"，"川菜"' 
+              maxlength={50}
+              showConfirmBar={false}
+              value={keyword}
+              onInput={(e) => setKeyword(e.detail.value)}
+            />
+            <Text className='keyword-counter'>{keyword.length}/50</Text>
+          </View>
+        </View>
+
+        <View className='section'>
+          <View className='section-header'>
             <View className='section-title'>生成结果</View>
             <View className='copy-btn'>
               <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
@@ -203,7 +285,7 @@ const Profile: FC = () => {
       </View> 
 
         <View className='footer'>
-          <Button className='generate-btn' onClick={buildReview}>✨ 生成好评</Button>
+          <Button className='generate-btn' onClick={buildReview}>一键生成好评</Button>
         </View>
       </View>
     </View>

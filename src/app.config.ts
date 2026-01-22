@@ -8,6 +8,7 @@ export default defineAppConfig({
     "pages/user-agreement/index",
     "pages/records/index",
     "pages/templates/index",
+    "pages/proCreate/index",
   ],
   tabBar: {
     color: '#4B5563',           // 未选中项文字颜色
@@ -21,6 +22,12 @@ export default defineAppConfig({
         // 图标需使用本地相对路径，建议放在 src/assets/
         iconPath: 'assets/tab-profile.png',
         selectedIconPath: 'assets/tab-profile-active.png'
+      },
+      {
+        pagePath: 'pages/proCreate/index',
+        text: '专业模式',
+        iconPath: 'assets/tab-home.png',
+        selectedIconPath: 'assets/tab-home-active.png'
       },
       {
         pagePath: 'pages/profile/index',

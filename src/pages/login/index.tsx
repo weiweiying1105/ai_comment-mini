@@ -37,7 +37,15 @@ export default function LoginPage() {
 
   // 微信登录（不获取用户信息）
   const handleWxLogin = async () => {
-    if (loading) return
+    if (loading) return;
+    if(!agree) {
+      Taro.showToast({
+        title: '请先同意用户协议',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
 
     setLoading(true)
 
