@@ -32,7 +32,7 @@ const AiReviewPage = () => {
             success: (res) => {
                 // setImages(res.tempFilePaths)
                 Taro.uploadFile({
-                  url:BASE_URL+'/api/upload',
+                  url:BASE_URL+'/api/comment/image',
                   filePath:res.tempFilePaths[0],
                   name:'file',
                   success:(res) => {

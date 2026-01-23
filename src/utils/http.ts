@@ -95,7 +95,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         Taro.hideLoading()
 
         const { statusCode, data } = response
-
+        console.log('请求成功，返回response:', statusCode, 'data:', data)
         // 处理HTTP状态码
         if (statusCode === 401) {
             return handleTokenRefresh(config)
