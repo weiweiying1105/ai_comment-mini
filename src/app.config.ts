@@ -25,7 +25,7 @@ export default defineAppConfig({
       },
       {
         pagePath: 'pages/proCreate/index',
-        text: '专业模式',
+        text: '美食专业模式',
         iconPath: 'assets/tab-home.png',
         selectedIconPath: 'assets/tab-home-active.png'
       },

@@ -4,3 +4,54 @@ button:after {
 .main-color{
     color: #e5e7eb;
 }
+/* 字数限制区域样式 */
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mb-2 {
+  margin-bottom: 16rpx;
+}
+
+.text-sm {
+  font-size: 24rpx;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.text-gray-700 {
+  color: #374151;
+}
+
+.text-primary-dark {
+  color: #111827;
+}
+
+.bg-primary-10 {
+  background-color: rgba(255, 212, 0, 0.1);
+}
+
+.px-3 {
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+}
+
+.py-4 {
+  padding-top: 4rpx;
+  padding-bottom: 4rpx;
+}
+
+.rounded-full {
+  border-radius: 9999rpx;
+}
+

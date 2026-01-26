@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import './index.less'
 
 const PrivacyPolicy: React.FC = () => {
+  const WXNAME = '好评灵感助手'
   return (
     <View className='policy-container'>
       <ScrollView className='policy-content'>
@@ -10,7 +11,7 @@ const PrivacyPolicy: React.FC = () => {
         
         <Text className='policy-section-title'>1. 引言</Text>
         <Text className='policy-text'>
-          欢迎使用好评生成助手应用（以下简称"本应用"）。我们非常重视您的隐私保护和个人信息安全。本隐私政策旨在向您说明我们在收集、使用、存储和保护您的个人信息方面的做法，请您仔细阅读。
+          欢迎使用{WXNAME}应用（以下简称"本应用"）。我们非常重视您的隐私保护和个人信息安全。本隐私政策旨在向您说明我们在收集、使用、存储和保护您的个人信息方面的做法，请您仔细阅读。
         </Text>
         
         <Text className='policy-section-title'>2. 我们收集的信息</Text>
