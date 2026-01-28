@@ -4,6 +4,7 @@ import './index.scss'
 import Taro, { useRouter, useDidShow } from '@tarojs/taro'
 import { httpGet, httpPost } from '@/utils/http'
 import { ICategory } from '../../../typings'
+import { ensureUserReady } from '@/utils/auth'
 // 4B5563  unactive
 // 111827  active
 // 语气
@@ -73,18 +74,24 @@ const Profile: FC = () => {
 
   const buildReview = () => {
     console.log('buildReview', selectedChild)
-    const found = categoryList.find(c => c.id === category)
-    const catLabel = found && found.name ? found.name : '美食'
-    httpPost('/api/comment', {
-      words: limit,
-      categoryName: (selectedChild && selectedChild.name) ? selectedChild.name : catLabel,
-      categoryId: (selectedChild && selectedChild.id) ? selectedChild.id : category,
+   ensureUserReady({ needPhone: true }).then(res => {
+      return res
+    }).then(res => {
+      if (!res) {
+        return
+      }
+      const found = categoryList.find(c => c.id === category)
+      const catLabel = found && found.name ? found.name : '美食'
+      httpPost('/api/comment', {
+        words: limit,
+        categoryName: (selectedChild && selectedChild.name) ? selectedChild.name : catLabel,
+        categoryId: (selectedChild && selectedChild.id) ? selectedChild.id : category,
       tone:toneLabel
     }).then(res => {
       console.log(res)
       setResult(res.text)
     })
-
+  })
   }
   const goAllCategory = () => {
     Taro.navigateTo({
@@ -106,6 +113,16 @@ const Profile: FC = () => {
     // 切换的时候清空选择的二级
     handleCancelChild()
   }
+  const handleCopy = () => {
+  if (result) {
+    Taro.setClipboardData({
+      data: result,
+      success: () => {
+        Taro.showToast({ title: '复制成功', icon: 'success' ,duration:2000})
+      }
+    })
+  }
+}
   return (
     <View className='profile-page'>
       <View className='section'>
@@ -170,7 +187,7 @@ const Profile: FC = () => {
         <View className='section'>
           <View className='section-header'>
             <View className='section-title'>生成结果</View>
-            <View className='copy-btn'>
+            <View className='copy-btn' onClick={handleCopy}>
               <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
               <Text className='copy-hint'>
                 复制
@@ -178,15 +195,20 @@ const Profile: FC = () => {
             </View>
 
           </View>
-          <View className='result-box'>
-            <Textarea
-              className='result-textarea'
-              value={result}
-              placeholder={hintText}
-              maxlength={300}
-              showConfirmBar={false}
-              autoHeight
-            />
+          <View className={`ai-preview-content ${result ? 'ai-preview-content--filled' : 'ai-preview-content--empty'}`}>
+            {result ? (
+              <View className="ai-preview-text">
+                <Text className="ai-preview-text-content">{result}</Text>
+              </View>
+            ) : (
+              <>
+                <View className="ai-preview-icon">
+                  <Text className="ai-preview-icon-text">✨</Text>
+                </View>
+                <Text className="ai-preview-placeholder">生成的好评将显示在这里。
+                  准备好给别人留下深刻印象了吗？</Text>
+              </>
+            )}
           </View>
         </View>
 
@@ -203,6 +225,9 @@ const Profile: FC = () => {
       </View> 
 
         <View className='footer'>
+           <Button className='copy-btn' onClick={handleCopy}>
+            <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
+        </Button>
           <Button className='generate-btn' onClick={buildReview}>一键生成好评</Button>
         </View>
       </View>

@@ -47,7 +47,7 @@
 .section-title {
   font-size: 32rpx;
   font-weight: 700;
-  color: #111;
+  color: #333;
 }
 
 .section-more {
@@ -173,6 +173,7 @@
   background: #fffbe6;
 }
 
+/* 底部主按钮 */
 .footer {
   position: fixed;
   bottom: 24rpx;
@@ -182,6 +183,28 @@
   bottom: 0;
   box-sizing: border-box;
   width: 100vw;
+  display: flex;
+  gap: 24rpx; // 12px
+  
+.copy-btn {
+  width: 150rpx;
+  background: #fff;
+  color: #333;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 24rpx; // 12px
+  gap: 8rpx; // 4px
+  // 上下左右的阴影
+  box-shadow: 0 0px 16rpx rgba(0, 0, 0, 0.04);
+
+}
+.copy-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
 }
 
 .generate-btn {
@@ -189,6 +212,16 @@
   background: #ffd400;
   color: #333;
   border-radius: 48rpx;
+    box-shadow: 0 10rpx 16rpx rgba(0, 0, 0, 0.04);
+  
+}
+.textarea-placeholder{
+  font-size: 26rpx; // 11px
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  font-weight: 700;
+  line-height: 1.6;
 }
 
 /* 二级分类 chips 样式 */
@@ -240,4 +273,58 @@
   /* gray-500 */
   width: 24rpx;
   height: 24rpx;
+}
+.ai-preview-content {
+  border-radius: 48rpx;
+  padding: 24rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 320rpx;
+  box-sizing: border-box;
+}
+.ai-preview-content--empty {
+  border: 4rpx dashed #e5e7eb;
+}
+
+.ai-preview-content--filled {
+  border: 4rpx solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.ai-preview-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background-color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+
+.ai-preview-icon-text {
+  font-size: 48rpx;
+  color: #9ca3af;
+}
+
+.ai-preview-placeholder {
+  font-size: 28rpx;
+  color: #9ca3af;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.ai-preview-text {
+  width: 100%;
+  text-align: left;
+}
+
+.ai-preview-text-content {
+  font-size: 32rpx;
+  color: #111827;
+  line-height: 1.6;
+  text-align: left;
 }

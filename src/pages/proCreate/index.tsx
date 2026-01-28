@@ -53,6 +53,17 @@ const AiReviewPage = () => {
         const data = JSON.parse(uploadRes.data)
         if (data.code === 200 && data.data && data.data.url) {
           setImages(prev => [...prev, data.data.url])
+          // 把照片存到手机上
+          Taro.saveImageToPhotosAlbum({
+            filePath: tempFilePath,
+            success: () => {
+              // Taro.showToast({ title: '图片已保存到相册', icon: 'success' })
+            },
+            fail: (err) => {
+              Taro.showToast({ title: '保存图片失败', icon: 'none' })
+              console.error('保存图片失败:', err)
+            }
+          })
           Taro.showToast({ title: '上传成功', icon: 'success' })
         } else {
           throw new Error(data.message || '上传失败')
@@ -66,6 +77,10 @@ const AiReviewPage = () => {
   }
   const buildReview = async () => {
     try {
+      if (!keyword && !images.length) {
+        Taro.showToast({ title: '请输入商品名称,或者上传商品图片', icon: 'none' ,duration: 5000})
+        return
+      }
       setLoading(true)
 
       const response = await httpPost('/api/comment/image', {
@@ -100,7 +115,7 @@ const AiReviewPage = () => {
       Taro.setClipboardData({
         data: result,
         success: () => {
-          Taro.showToast({ title: '复制成功', icon: 'success' })
+          Taro.showToast({ title: '复制成功', icon: 'success' ,duration:2000})
         }
       })
     }
@@ -212,8 +227,7 @@ const AiReviewPage = () => {
           </View> */}
           <View className={`ai-preview-content ${result ? 'ai-preview-content--filled' : 'ai-preview-content--empty'}`}>
             {result ? (
-              <View className="ai-preview-text">
-                <Text className="ai-preview-text-content">{result}</Text>
+              <View className="ai-preview-text">{result}
               </View>
             ) : (
               <>
@@ -232,7 +246,6 @@ const AiReviewPage = () => {
       <View className='footer'>
         <Button className='copy-btn' onClick={handleCopy}>
           <Image className='copy-icon' src="https://res.cloudinary.com/dc6wdjxld/image/upload/v1766493141/copy_1_g1g6uc.png"></Image>
-          {/* <Text className='copy-text'>复制</Text> */}
         </Button>
         <Button className='generate-btn' onClick={buildReview}>生成好评</Button>
       </View>

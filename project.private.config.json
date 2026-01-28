@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/proCreate/index",
-          "pathName": "pages/proCreate/index",
+          "name": "pages/bind-phone/index",
+          "pathName": "pages/bind-phone/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/proCreate/index",
+          "pathName": "pages/proCreate/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "pages/proCreate/index",

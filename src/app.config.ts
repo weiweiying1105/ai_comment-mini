@@ -9,6 +9,7 @@ export default defineAppConfig({
     "pages/records/index",
     "pages/templates/index",
     "pages/proCreate/index",
+    "pages/bind-phone/index",
   ],
   tabBar: {
     color: '#4B5563',           // 未选中项文字颜色
@@ -26,13 +27,12 @@ export default defineAppConfig({
       {
         pagePath: 'pages/proCreate/index',
         text: '美食专业模式',
-        iconPath: 'assets/tab-home.png',
-        selectedIconPath: 'assets/tab-home-active.png'
+        iconPath: 'assets/pro.png',
+        selectedIconPath: 'assets/pro-active.png'
       },
       {
         pagePath: 'pages/profile/index',
         text: '我的',
-
         iconPath: 'assets/tab-home.png',
         selectedIconPath: 'assets/tab-home-active.png'
       }
