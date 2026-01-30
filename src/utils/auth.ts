@@ -90,7 +90,7 @@ export async function ensureUserReady(options: EnsureOptions = {}) {
     let { userInfo, lastUserInfoCheckTime } = getUserInfoCached()
     console.log('ensureUserReady', userInfo, lastUserInfoCheckTime)
     // 2. 没有 token -> 去登录
-    if (!TOKEN) {
+    if (!TOKEN || !Taro.getStorageSync('token')) {
         // 这里可以根据需求，跳登录页或弹窗提示
         Taro.navigateTo({
             url: '/pages/login/index?redirect=' + encodeURIComponent(getCurrentPageUrl()),

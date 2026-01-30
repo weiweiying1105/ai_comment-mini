@@ -28,7 +28,7 @@ export default function LoginPage() {
     if (token && savedUserInfo) {
       // 已登录，跳转到首页
       Taro.switchTab({
-        url: '/pages/expense/index'
+        url: '/pages/index/index'
       })
     }
   }

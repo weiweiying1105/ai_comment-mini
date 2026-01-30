@@ -5,6 +5,7 @@ import prodConfig from './prod'
 
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
 export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
+  console.log('mode', mode)
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: 'mini-taro',
     date: '2025-12-10',

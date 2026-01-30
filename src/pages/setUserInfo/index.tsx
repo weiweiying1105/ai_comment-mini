@@ -33,7 +33,7 @@ const SetUserInfo: React.FC = () => {
 
   useEffect(() => {
     // 获取已保存的用户信息
-    const savedUserInfo = Taro.getStorageSync('userInfo')
+    const savedUserInfo = Taro.getStorageSync('USER_INFO')
     if (savedUserInfo && savedUserInfo.nickName && savedUserInfo.avatarUrl) {
       setUserInfo({
         nickName: savedUserInfo.nickName,
@@ -113,7 +113,7 @@ const SetUserInfo: React.FC = () => {
       // 更新头像URL
       setUserInfo(prev => {
         // 更新本地存储
-        Taro.setStorageSync('userInfo', {
+        Taro.setStorageSync('USER_INFO', {
           ...prev,
           avatarUrl: uploadResult
         });
@@ -158,7 +158,7 @@ const SetUserInfo: React.FC = () => {
     const currentUserInfo = data || userInfo
     
     // 更新本地存储的用户信息
-    const savedUserInfo = Taro.getStorageSync('userInfo') || {}
+    const savedUserInfo = Taro.getStorageSync('USER_INFO') || {}
     if (currentUserInfo.nickName) {
       savedUserInfo.nickName = currentUserInfo.nickName
     }
@@ -172,7 +172,7 @@ const SetUserInfo: React.FC = () => {
     try {
       const res = await httpPut('/api/user/info', updatedUserInfo)
       console.log('更新用户信息成功:', res)
-      Taro.setStorageSync('userInfo', updatedUserInfo)
+      Taro.setStorageSync('USER_INFO', updatedUserInfo)
       
       Taro.showToast({
         title: '保存成功',

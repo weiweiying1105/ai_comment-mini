@@ -608,3 +608,38 @@
 .slider-card {
  margin-bottom: 32rpx;
 }
+
+/* AI识别菜品显示样式 */
+.ai-dishes-container {
+  margin-top: 32rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx solid #f3f4f6;
+}
+
+.ai-dishes-label {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #4b5563;
+  margin-bottom: 16rpx;
+}
+
+.ai-dishes-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.ai-dish-tag {
+  background-color: #fffbe6;
+  border: 2rpx solid #ffd400;
+  border-radius: 32rpx;
+  padding: 12rpx 20rpx;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ai-dish-tag-text {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 500;
+}

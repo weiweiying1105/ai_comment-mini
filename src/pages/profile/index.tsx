@@ -111,7 +111,7 @@ export default function ProfilePage() {
       // 更新头像URL
       setUser(prev => {
         // 更新本地存储
-        Taro.setStorageSync('userInfo', {
+        Taro.setStorageSync('USER_INFO', {
           ...prev,
           avatarUrl: uploadResult
         });
@@ -160,7 +160,7 @@ export default function ProfilePage() {
     const currentUser = data || user
     
     // 更新本地存储的用户信息
-    const savedUser = Taro.getStorageSync('user') || {}
+    const savedUser = Taro.getStorageSync('USER_INFO') || {}
     if (currentUser.nickName) { 
       savedUser.nickName = currentUser.nickName
     }
@@ -172,7 +172,7 @@ export default function ProfilePage() {
     }
    const res = await httpPut('/api/user/info', updatedUser)
   console.log('更新用户信息成功:',res)
-    Taro.setStorageSync('userInfo', updatedUser)
+    Taro.setStorageSync('USER_INFO', updatedUser)
 
     Taro.showToast({
       title: '保存成功',

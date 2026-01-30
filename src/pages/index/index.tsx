@@ -68,13 +68,10 @@ const Profile: FC = () => {
     return toneOptions.map(tag => tag.label).join('、') || ''
   }, [selectedOptions])
 
-  const hintText = useMemo(() => {
-    return '点击下方按钮，可一键生成好评'
-  }, [])
-
   const buildReview = () => {
     console.log('buildReview', selectedChild)
-   ensureUserReady({ needPhone: true }).then(res => {
+    // debugger
+   ensureUserReady({ needPhone: false }).then(res => {
       return res
     }).then(res => {
       if (!res) {
