@@ -67,10 +67,10 @@ const ProCreatePage = () => {
               }
             })
           }
-          
+
           // 上传成功后分析图片识别菜品
           await analyzeImage(data.data.url)
-          
+
           Taro.showToast({ title: '上传成功', icon: 'success' })
         } else {
           throw new Error(data.message || '上传失败')
@@ -87,12 +87,12 @@ const ProCreatePage = () => {
     try {
       setAnalyzing(true)
       Taro.showLoading({ title: '分析图片中...', mask: true })
-      
+
       const response = await httpPost('/api/comment/image', {
         images: [imageUrl],
         keyword: keyword
       })
-      
+
       if (response.dishes && response.dishes.length > 0) {
         setDishes(response.dishes)
         setKeyword(keyword + response.dishes.join('、'))
@@ -108,12 +108,10 @@ const ProCreatePage = () => {
   }
 
   const buildReview = async () => {
-     ensureUserReady({ needPhone: false }).then(res => {
-          return res
-        }).then(res => {
-          if (!res) {
-            return
-          }
+    const res = await ensureUserReady({ needPhone: false })
+    if (!res) {
+      return
+    }
     try {
       if (!keyword && !images.length) {
         Taro.showToast({ title: '请输入商品名称,或者上传商品图片', icon: 'none', duration: 5000 })
@@ -135,7 +133,7 @@ const ProCreatePage = () => {
     } finally {
       setLoading(false)
     }
-  })
+
   }
 
   const handleInput = (value: string) => {

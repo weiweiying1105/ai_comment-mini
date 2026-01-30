@@ -27,7 +27,7 @@ export default function ProfilePage() {
     avatarUrl: string,
     nickName: string,
     id: string
-  }>({
+  }>(Taro.getStorageSync('USER_INFO') || {
     avatarUrl: '',
     nickName: '',
     id: ''
