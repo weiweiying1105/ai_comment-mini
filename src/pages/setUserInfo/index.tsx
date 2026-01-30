@@ -91,6 +91,7 @@ const SetUserInfo: React.FC = () => {
             upload_preset: CLOUDINARY_CONFIG.upload_preset,
           },
           success(res) {
+            Taro.hideLoading()
             try {
               const data = JSON.parse(res.data);
               console.log("处理返回结果", data);
@@ -105,6 +106,7 @@ const SetUserInfo: React.FC = () => {
             }
           },
           fail(error) {
+            Taro.hideLoading()
             reject(error);
           }
         });

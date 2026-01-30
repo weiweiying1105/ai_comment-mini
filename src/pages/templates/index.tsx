@@ -250,7 +250,7 @@ const Templates: FC = () => {
                             </View>
                             <Slider
                                 min={50}
-                                max={300}
+                                max={200}
                                 step={1}
                                 activeColor='#F9F506'
                                 blockColor='#F9F506'
@@ -291,7 +291,7 @@ const Templates: FC = () => {
                                     className='result-textarea'
                                     value={regenerateResult}
                                     placeholder='点击下方按钮，重新生成好评…'
-                                    maxlength={300}
+                                    maxlength={200}
                                     showConfirmBar={false}
                                     autoHeight
                                 />

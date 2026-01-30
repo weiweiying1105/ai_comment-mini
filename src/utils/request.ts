@@ -43,7 +43,12 @@ let requestQueue: Array<() => void> = [];// 刷新token后重新请求的队列
 const request = async <T = any>(config: RequestConfig): Promise<T> => {
     // 如果刷新token失败，直接拒绝
     if (refreshFailed) {
-        throw new Error('Token刷新失败')
+        Taro.showToast({
+            title: 'Token刷新失败',
+            icon: 'none',
+            duration: 2000
+        })
+        // throw new Error('Token刷新失败')
     }
     // 动态获取最新的token
 
@@ -101,7 +106,12 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         }
 
         if (statusCode !== 200) {
-            throw new Error(`HTTP ${statusCode}: 请求失败`)
+            Taro.showToast({
+                title: `HTTP ${statusCode}: 请求失败`,
+                icon: 'none',
+                duration: 2000
+            })
+            // throw new Error(`HTTP ${statusCode}: 请求失败`)
         }
 
         // 处理业务状态码
@@ -132,35 +142,35 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         url: '/pages/login/index'
                     })
                 }, 2000)
-                throw new Error(message || '登录已过期')
+                // throw new Error(message || '登录已过期')
 
             case ResponseCode.FORBIDDEN:
                 Taro.showToast({
                     title: message || '没有权限访问',
                     icon: 'none'
                 })
-                throw new Error(message || '没有权限访问')
+                // throw new Error(message || '没有权限访问')
 
             case ResponseCode.NOT_FOUND:
                 Taro.showToast({
                     title: message || '请求的资源不存在',
                     icon: 'none'
                 })
-                throw new Error(message || '请求的资源不存在')
+                // throw new Error(message || '请求的资源不存在')
 
             case ResponseCode.INVALID_PARAMS:
                 Taro.showToast({
                     title: message || '参数错误',
                     icon: 'none'
                 })
-                throw new Error(message || '参数错误')
+                // throw new Error(message || '参数错误')
 
             case ResponseCode.SERVER_ERROR:
                 Taro.showToast({
                     title: message || '服务器错误',
                     icon: 'none'
                 })
-                throw new Error(message || '服务器错误')
+                // throw new Error(message || '服务器错误')
 
             default:
                 if (code !== ResponseCode.SUCCESS) {
@@ -168,7 +178,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         title: message || '请求失败',
                         icon: 'none'
                     })
-                    throw new Error(message || '请求失败')
+                    // throw new Error(message || '请求失败')
                 }
                 return responseData
         }
@@ -194,7 +204,7 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
     // 如果刷新token失败，直接拒绝请求
     if (refreshFailed) {
         console.log('refreshFailed为true，直接拒绝请求')
-        throw new Error('登录已过期，请重新登录')
+        // throw new Error('登录已过期，请重新登录')
     }
 
     const oldToken = Taro.getStorageSync('token')
@@ -205,7 +215,7 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
         console.log('没有oldToken，跳转登录页')
         // debugger
         redirectToLogin()
-        throw new Error('请先登录')
+        // throw new Error('请先登录')
     }
 
     console.log('当前isRefreshing状态:', isRefreshing)
@@ -251,7 +261,11 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
                 }
                 return request(newConfig)
             } else {
-                throw new Error('刷新token失败')
+                // throw new Error('刷新token失败')
+                Taro.showToast({
+                    title: '刷新token失败',
+                    icon: 'none'
+                })
             }
         } catch (refreshError) {
             // 刷新失败，清除本地数据并跳转登录

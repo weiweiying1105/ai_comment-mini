@@ -73,7 +73,7 @@ const ProCreatePage = () => {
 
           Taro.showToast({ title: '上传成功', icon: 'success' })
         } else {
-          throw new Error(data.message || '上传失败')
+           Taro.showToast({ title: '上传失败', icon: 'none' })
         }
       } catch (error: any) {
         Taro.hideLoading()
@@ -86,20 +86,22 @@ const ProCreatePage = () => {
   const analyzeImage = async (imageUrl: string) => {
     try {
       setAnalyzing(true)
-      Taro.showLoading({ title: '分析图片中...', mask: true })
+      // Taro.showLoading({ title: '分析图片中...', mask: true })
 
       const response = await httpPost('/api/comment/image', {
         images: [imageUrl],
         keyword: keyword
       })
+      Taro.hideLoading()
 
-      if (response.dishes && response.dishes.length > 0) {
-        setDishes(response.dishes)
+      if (response&&response?.dishes && response.dishes.length > 0) {
+        setDishes(response?.dishes)
         setKeyword(keyword + response.dishes.join('、'))
         Taro.showToast({ title: `识别到${response.dishes.length}个菜品`, icon: 'success' })
       }
+      console.log('分析图片响应:', response)
     } catch (error: any) {
-      console.error('分析图片失败:', error)
+      // console.error('分析图片失败:', error)
       Taro.showToast({ title: error.message || '分析图片失败，请重试', icon: 'none' })
     } finally {
       setAnalyzing(false)
@@ -178,7 +180,7 @@ const ProCreatePage = () => {
           <View className='slider-card'>
             <Slider
               min={50}
-              max={300}
+              max={200}
               step={10}
               activeColor='#ffd400'
               blockColor='#ffd400'

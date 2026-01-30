@@ -22,6 +22,7 @@ const AuthorizePhone: React.FC = () => {
       // 调用微信手机号授权
       Taro.login({
         success: async (loginRes) => {
+          Taro.hideLoading()
           if (loginRes.code) {
             try {
               // 发送code到服务器获取手机号
@@ -55,6 +56,7 @@ const AuthorizePhone: React.FC = () => {
           }
         },
         fail: (error) => {
+          Taro.hideLoading()
           console.error('登录失败:', error)
           Taro.showToast({ 
             title: '登录失败，请重试', 

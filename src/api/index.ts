@@ -23,10 +23,11 @@ export async function callLoginApi(code: string) {
             const msg = response && (response as any).data && (response as any).data.message
                 ? (response as any).data.message
                 : '未知错误'
-            throw new Error(`登录失败: ${msg}`)
+             Taro.showToast({ title: msg || '登录失败', icon: 'none' })
         }
     } catch (error: any) {
         console.error('登录API调用失败:', error)
-        throw new Error(error && error.message ? error.message : '登录失败')
+        // throw new Error(error && error.message ? error.message : '登录失败')
+        Taro.showToast({ title: error && error.message ? error.message : '登录失败', icon: 'none' })
     }
 }

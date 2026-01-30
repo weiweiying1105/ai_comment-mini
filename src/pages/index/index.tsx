@@ -105,10 +105,13 @@ const Profile: FC = () => {
     Taro.setStorageSync('selectChild', null)
     setSelectedChild(null)
   }
+  // 选择一级分类
   const handleSelectCategory = (item: ICategory) => {
     setCategory(item.id);
     // 切换的时候清空选择的二级
     handleCancelChild()
+    // 切换一级分类，清空内容
+    setResult('')
   }
   const handleCopy = () => {
   if (result) {
@@ -122,7 +125,7 @@ const Profile: FC = () => {
 }
   return (
     <View className='profile-page'>
-      <View className='section'>
+      <View className='section first-section'>
         <View className='section-header'>
           <View className='section-title'>选择类别</View>
           <Text className='section-more' onClick={() => goAllCategory()}>查看更多</Text>
@@ -171,7 +174,7 @@ const Profile: FC = () => {
           </View>
           <Slider
             min={50}
-            max={300}
+            max={200}
             step={10}
             activeColor='#ffd400'
             blockColor='#ffd400'

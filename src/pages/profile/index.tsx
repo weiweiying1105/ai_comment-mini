@@ -89,6 +89,7 @@ export default function ProfilePage() {
             upload_preset: CLOUDINARY_CONFIG.upload_preset,
           },
           success(res) {
+            Taro.hideLoading()
             try {
               const data = JSON.parse(res.data);
                console.log("处理返回结果", data);
@@ -103,6 +104,7 @@ export default function ProfilePage() {
             }
           },
           fail(error) {
+            Taro.hideLoading()
             reject(error);
           }
         });
