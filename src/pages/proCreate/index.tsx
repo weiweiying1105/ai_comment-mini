@@ -29,6 +29,10 @@ const ProCreatePage = () => {
   const TOKEN = Taro.getStorageSync('token')
 
   const handleUpload = async () => {
+    const user = await ensureUserReady({ needPhone: false })
+    if (!user) {
+      return
+    }
     const res = await Taro.chooseImage({
       count: 1,
       sizeType: ['compressed'],
@@ -38,13 +42,20 @@ const ProCreatePage = () => {
     if (res.tempFilePaths && res.tempFilePaths.length > 0) {
       try {
         const tempFilePath = res.tempFilePaths[0]
+        console.log('临时文件路径:', tempFilePath)
 
-        Taro.showLoading({ title: '上传中...', mask: true })
+      
 
+        Taro.showLoading({ title: '分析中...', mask: true })
+
+        // 直接调用新的API，同时进行识别和上传
         const uploadRes = await Taro.uploadFile({
-          url: `${BASE_URL}/api/upload`,
+          url: `${BASE_URL}/api/comment/image`,
           filePath: tempFilePath,
-          name: 'file',
+          name: 'files',
+          formData: {
+            keyword: keyword
+          },
           header: {
             'Authorization': `Bearer ${TOKEN}`
           }
@@ -53,8 +64,19 @@ const ProCreatePage = () => {
         Taro.hideLoading()
 
         const data = JSON.parse(uploadRes.data)
-        if (data.code === 200 && data.data && data.data.url) {
-          setImages(prev => [...prev, data.data.url])
+        console.log('分析图片响应:', data)
+        
+        if (data.code === 200 && data.data) {
+          const { dishes } = data.data
+          
+          if (dishes && dishes.length > 0) {
+            setDishes(dishes)
+            setKeyword(keyword + dishes.join('、'))
+            // 立即添加图片到预览列表，用户可以立即看到图片
+             setImages(prev => [...prev, tempFilePath])
+            Taro.showToast({ title: `识别到${dishes.length}个菜品`, icon: 'success' })
+          }
+          
           // 如果是拍照的，把照片存到手机上
           if (res?.sourceType === 'camera') {
             Taro.saveImageToPhotosAlbum({
@@ -67,45 +89,18 @@ const ProCreatePage = () => {
               }
             })
           }
-
-          // 上传成功后分析图片识别菜品
-          await analyzeImage(data.data.url)
-
-          Taro.showToast({ title: '上传成功', icon: 'success' })
+        } else if (data.code === 501) {
+          Taro.showToast({ title: '未识别到菜品', icon: 'none' })
         } else {
-           Taro.showToast({ title: '上传失败', icon: 'none' })
+          Taro.showToast({ title: data.message || '分析失败', icon: 'none' })
         }
       } catch (error: any) {
         Taro.hideLoading()
-        console.error('上传失败:', error)
-        Taro.showToast({ title: error.message || '上传失败，请重试', icon: 'none' })
+        console.error('分析失败:', error)
+        Taro.showToast({ title: error.message || '分析失败，请重试', icon: 'none' })
+      } finally {
+        setAnalyzing(false)
       }
-    }
-  }
-
-  const analyzeImage = async (imageUrl: string) => {
-    try {
-      setAnalyzing(true)
-      // Taro.showLoading({ title: '分析图片中...', mask: true })
-
-      const response = await httpPost('/api/comment/image', {
-        images: [imageUrl],
-        keyword: keyword
-      })
-      Taro.hideLoading()
-
-      if (response&&response?.dishes && response.dishes.length > 0) {
-        setDishes(response?.dishes)
-        setKeyword(keyword + response.dishes.join('、'))
-        Taro.showToast({ title: `识别到${response.dishes.length}个菜品`, icon: 'success' })
-      }
-      console.log('分析图片响应:', response)
-    } catch (error: any) {
-      // console.error('分析图片失败:', error)
-      Taro.showToast({ title: error.message || '分析图片失败，请重试', icon: 'none' })
-    } finally {
-      setAnalyzing(false)
-      Taro.hideLoading()
     }
   }
 
@@ -120,15 +115,28 @@ const ProCreatePage = () => {
         return
       }
       setLoading(true)
-      const response = await httpPost('/api/comment/image', {
+      
+      // 准备参考文案
+      let reference = keyword
+      if (dishes && dishes.length > 0) {
+        reference = `推荐菜品：${dishes.join('、')}、${keyword}`
+      }
+      
+      // 调用评论生成接口
+      const response = await httpPost('/api/comment', {
+        categoryName: '美食',
+        categoryId: 1, // 美食分类ID
         words: limit,
-        tone: toneLabel,
-        keyword: keyword,
-        images: images
+        reference: reference,
+        tone: toneLabel
       })
       console.log('生成结果:', response)
 
-      setResult(response.comment || '')
+      if (response && response.text) {
+        setResult(response.text)
+      } else {
+        Taro.showToast({ title: '生成失败，请重试', icon: 'none' })
+      }
     } catch (error) {
       console.error('生成失败', error)
       Taro.showToast({ title: '生成失败，请重试', icon: 'none' })
@@ -193,6 +201,18 @@ const ProCreatePage = () => {
         {/* 关键词区域 */}
         <View className='ai-section'>
           <View className='ai-card ai-card--textarea'>
+            {/* clear */}
+            <Image
+              className='ai-card__clear'
+              src='https://ai-comment-1303796882.cos.ap-shanghai.myqcloud.com/uploads/1770100282082-f63b23f250688.png'
+              mode='aspectFill'
+              onClick={() => {
+                setKeyword('')
+                setSelectedOptions([])
+                setDishes([])
+                setImages([])
+              }}
+            />
             <View className='ai-card__body'>
               <Text className='ai-label'>上传菜品细节图（可选）</Text>
 

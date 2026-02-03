@@ -187,9 +187,10 @@ export default function ProfilePage() {
     }, 1500)
   }
 
-  // 返回上一页
-  const handleGoBack = () => {
-    Taro.navigateBack()
+  // 建议/反馈
+  const handleFeedback = () => {
+    // 打开客服对话框
+     Taro.openCustomerServiceChat()
   }
   return (
     <View className='profile-page'>
@@ -225,7 +226,7 @@ export default function ProfilePage() {
             className='profile-name'
             type='nickname'
             placeholder='请输入昵称'
-            value={user.nickName}
+            value={user.nickName || '美食达人'}
             onInput={handleNicknameInput}
             maxlength={20}
             focus={false}
@@ -256,16 +257,16 @@ export default function ProfilePage() {
             </View>
             <Text className='chevron'>›</Text>
           </View>
-          {/* <View className='menu-item'>
+          <View className='menu-item' onClick={() => handleFeedback()}>
             <View className='menu-icon primary'>
-              <Text className='icon'>◆</Text>
+              <Text className='icon'>✉</Text>
             </View>
             <View className='menu-content with-badge'>
-              <Text className='menu-title'>会员计划</Text>
-              <Text className='upgrade-badge'>UPGRADE</Text>
+              <Text className='menu-title'>建议/反馈</Text>
+              {/* <Text className='upgrade-badge'>UPGRADE</Text> */}
             </View>
             <Text className='chevron'>›</Text>
-          </View> */}
+          </View>
         </View>
       </View>
 

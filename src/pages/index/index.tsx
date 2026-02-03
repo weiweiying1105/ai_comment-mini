@@ -198,7 +198,7 @@ const Profile: FC = () => {
           <View className={`ai-preview-content ${result ? 'ai-preview-content--filled' : 'ai-preview-content--empty'}`}>
             {result ? (
               <View className="ai-preview-text">
-                <Text className="ai-preview-text-content">{result}</Text>
+                {result}
               </View>
             ) : (
               <>
