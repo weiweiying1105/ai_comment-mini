@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import './index.less'
 
 const UserAgreement: React.FC = () => {
+  const WXNAME = 'AI帮你想好评'
   return (
     <View className='agreement-container'>
       <ScrollView className='agreement-content'>
@@ -10,7 +11,7 @@ const UserAgreement: React.FC = () => {
         
         <View className='agreement-section-title'>1. 协议的接受</View>
         <Text className='agreement-text'>
-          欢迎使用好评生成助手应用（以下简称"本应用"）。本协议是您与本应用之间关于使用本应用服务的法律协议。
+          欢迎使用{WXNAME}应用（以下简称"本应用"）。本协议是您与本应用之间关于使用本应用服务的法律协议。
         </Text><br/>
         <Text className='agreement-text'>
           您在使用本应用前，请仔细阅读并理解本协议的所有条款。一旦您使用本应用，即表示您同意接受本协议的全部条款。

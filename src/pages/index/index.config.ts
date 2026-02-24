@@ -1,3 +1,3 @@
 export default definePageConfig({
-  navigationBarTitleText: '好评生成器'
+  navigationBarTitleText: 'AI帮你想好评'
 })

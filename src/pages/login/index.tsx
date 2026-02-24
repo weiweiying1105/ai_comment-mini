@@ -99,6 +99,7 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
+   const WXNAME = 'AI帮你想好评'
   return (
     <View className='login-page'>
       {/* Main Content Area */}
@@ -109,7 +110,7 @@ export default function LoginPage() {
           <View className='logo' style={logoStyle} />
           {/* Text Branding */}
           <View className='brand-text'>
-            <View className='title'>好评生成助手</View>
+            <View className='title'>{WXNAME}</View>
             <View className='subtitle'>一键生成大众点评优质好评</View>
             <View className='subtitle'>让您的店铺口碑飙升</View>
           </View>

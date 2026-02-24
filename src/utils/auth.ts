@@ -118,7 +118,7 @@ export async function ensureUserReady(options: EnsureOptions = {}) {
     // 5. 超出间隔了，才请求一次服务端，更新用户信息
     try {
         // 从接口获取用户信息
-        const res = await httpGet('api/user/info')
+        const res = await httpGet('/api/user/info')
         setUserInfo(res)
         
         // 更新userInfo为最新的信息

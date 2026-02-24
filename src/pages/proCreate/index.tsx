@@ -1,7 +1,6 @@
 // pages/proCreate/index.tsx
 import { View, Text, ScrollView, Textarea, Image, Button, Slider } from '@tarojs/components'
 import './index.scss'
-import { debounce } from '@/utils/debounce'
 import { useState, useMemo } from 'react'
 import Taro from '@tarojs/taro'
 import { httpPost } from '@/utils/http'

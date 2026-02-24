@@ -10,13 +10,6 @@ interface UserInfo {
 }
 // 默认头像
 const AVATAR_URL = 'https://6169-ai-accounting-5gprth66e60400be-1303796882.cos.ap-shanghai.myqcloud.com/ai-comment/ScreenShot_2026-01-21_160803_885.png'
-  // Cloudinary配置
-const CLOUDINARY_CONFIG = {
-  cloud_name: "dc6wdjxld",
-  upload_preset: "ai-accounting",
-  api_key: "925588468673723",
-  api_secret: "gBuAbiJsd-4jaWEDqpCkbwNMogk",
-};
 export default function ProfilePage() {
   const avatarStyle = useMemo(() => ({
     backgroundImage: `url(${AVATAR_URL})`,
@@ -81,23 +74,21 @@ export default function ProfilePage() {
       
       const uploadResult = await new Promise<string>((resolve, reject) => {
         Taro.uploadFile({
-          url: `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloud_name}/image/upload`,
+          url: `${process.env.BASE_URL || 'http://localhost:3000'}/api/upload`,
           filePath: tempAvatarUrl,
           name: "file",
-          formData: {
-            file: tempAvatarUrl,
-            upload_preset: CLOUDINARY_CONFIG.upload_preset,
+          header: {
+            'Authorization': `Bearer ${Taro.getStorageSync('token')}`
           },
           success(res) {
             Taro.hideLoading()
             try {
               const data = JSON.parse(res.data);
-               console.log("处理返回结果", data);
-              if (data.error) {
-                reject(new Error(data.error.message));
+              console.log("上传头像响应:", data);
+              if (data.code === 200 && data.data && data.data.url) {
+                resolve(data.data.url);
               } else {
-                const url = data.url || data.secure_url;
-                resolve(url);
+                reject(new Error(data.message || '上传失败'));
               }
             } catch (error) {
               reject(new Error('解析响应数据失败'));
@@ -173,24 +164,40 @@ export default function ProfilePage() {
       ...currentUser
     }
    const res = await httpPut('/api/user/info', updatedUser)
-  console.log('更新用户信息成功:',res)
+    console.log('更新用户信息成功:',res)
     Taro.setStorageSync('USER_INFO', updatedUser)
 
     Taro.showToast({
       title: '保存成功',
       icon: 'success'
     })
-
-    // 延迟返回上一页
-    setTimeout(() => {
-      Taro.navigateBack()
-    }, 1500)
+    // 重新获取用户信息
+    const updatedUserInfo = await httpGet('/api/user/info')
+  
+    setUser(updatedUserInfo)
+  
   }
 
   // 建议/反馈
   const handleFeedback = () => {
     // 打开客服对话框
-     Taro.openCustomerServiceChat()
+    // 使用类型断言
+    Taro.openCustomerServiceChat({
+      showMessageCard: true,
+      sendMessageTitle: '客服消息',
+      // sendMessagePath: '/pages/index/index',
+      // sendMessageImg: 'https://ai-comment-1303796882.cos.ap-shanghai.myqcloud.com/uploads/1769071844937-356dd2c701e09.png',
+      success: (res) => {
+        console.log('打开客服成功:', res)
+      },
+      fail: (err) => {
+        console.error('打开客服失败:', err)
+        Taro.showToast({
+          title: '打开客服失败，请重试',
+          icon: 'none'
+        })
+      }
+    } as any) // 使用类型断言
   }
   return (
     <View className='profile-page'>

@@ -14,12 +14,6 @@ const AllCategory: FC = () => {
   const [categoryList, setCategoryList] = useState<ICategory[]>([])
 
 
-  // useEffect(() => {
-  //   if(Taro.getStorageSync('selectChild') && Taro.getStorageSync('selectChild').id){
-  //     setSelectChild(Taro.getStorageSync('selectChild'))
-  //   }
-  // })
-
   useEffect(() => {
     httpGet('/api/category').then(res => {
       // setParent(res[0]?.id)
@@ -47,24 +41,34 @@ const AllCategory: FC = () => {
   }, [categoryList, parent])
 
   // 监听二级分类选中
-  useEffect(() => {
-    if (!hasUserSelected) return
-    if (!selectChild || !selectChild.id) return
-    // 通过事件通道把选中的子分类回传给上一页
-    // const ec = Taro.getCurrentInstance().page?.getOpenerEventChannel?.()
-    // ec?.emit('selectChild:update', { ...selectChild })
-    const inst = Taro.getCurrentInstance()
-    const ec = inst && inst.page && typeof (inst.page as any).getOpenerEventChannel === 'function'
-      ? (inst.page as any).getOpenerEventChannel()
-      : undefined
-    if (ec && typeof (ec as any).emit === 'function') {
-      (ec as any).emit('selectChild:update', { ...selectChild })
+// 修改建议
+useEffect(() => {
+  // 只在用户明确选择且有子分类时执行
+  if (!hasUserSelected || !selectChild || !selectChild.id) return
+  
+  // 立即设置标志，防止重复执行
+  setHasUserSelected(false)
+  
+  // 使用setTimeout确保状态更新完成后再执行导航
+  setTimeout(() => {
+    try {
+      // 通过事件通道把选中的子分类回传给上一页
+      const inst = Taro.getCurrentInstance()
+      const ec = inst?.page?.getOpenerEventChannel?.()
+      
+      if (ec) {
+        ec.emit('selectChild:update', { ...selectChild })
+      }
+      
+      // 返回上一页
+      Taro.navigateBack({
+        delta: 1,
+      })
+    } catch (error) {
+      console.error('导航回退失败:', error)
     }
-    // 返回上一页
-    Taro.navigateBack({
-      delta: 1,
-    })
-  }, [hasUserSelected, selectChild ? selectChild.id : undefined])
+  }, 0)
+}, [hasUserSelected, selectChild]) // 简化依赖数组
   return (
     <View className='all-category-page'>
       {/* 搜索框 */}

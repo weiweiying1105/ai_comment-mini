@@ -60,11 +60,11 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         try {
             const res = await Taro.login()
             if (res.code) {
-                console.log('登录成功，获取到code:', res.code)
+                // console.log('登录成功，获取到code:', res.code)
                 const loginRes = await callLoginApi(
                     res.code
                 )
-                console.log('登录成功，获取到token:', loginRes.token)
+                // console.log('登录成功，获取到token:', loginRes.token)
                 if (loginRes.token) {
                     token = loginRes.token
                     Taro.setStorageSync('token', loginRes.token)
@@ -95,7 +95,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         Taro.hideLoading()
 
         const { statusCode, data } = response
-        console.log('请求成功，返回response:', statusCode, 'data:', data)
+        // console.log('请求成功，返回response:', statusCode, 'data:', data)
         // 处理HTTP状态码
         if (statusCode === 401) {
             return handleTokenRefresh(config)
@@ -108,7 +108,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         // 处理业务状态码
         const apiResponse = data as ApiResponse
         const { code, message, data: responseData } = apiResponse
-         console.log('请求成功，返回apiResponse:', statusCode, 'code:', code, 'message:', message, 'data:', responseData)
+        //  console.log('请求成功，返回apiResponse:', statusCode, 'code:', code, 'message:', message, 'data:', responseData)
         
         switch (code) {
             case ResponseCode.SUCCESS:

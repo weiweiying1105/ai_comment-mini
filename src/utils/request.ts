@@ -64,11 +64,11 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         try {
             const res = await Taro.login()
             if (res.code) {
-                console.log('登录成功，获取到code:', res.code)
+                // console.log('登录成功，获取到code:', res.code)
                 const loginRes = await callLoginApi({
                     code: res.code
                 })
-                console.log('登录成功，获取到token:', loginRes.token)
+                // console.log('登录成功，获取到token:', loginRes.token)
                 if (loginRes.token) {
                     token = loginRes.token
                     Taro.setStorageSync('token', loginRes.token)

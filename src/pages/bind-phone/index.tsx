@@ -99,7 +99,7 @@ const AuthorizePhone: React.FC = () => {
               backgroundImage: `url(${LOGO_URL})` 
             }}
           />
-          <Text className='app-name'>好评生成助手</Text>
+          <Text className='app-name'>{WXNAME}</Text>
         </View>
 
         {/* 标题区域 */}
