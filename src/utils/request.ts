@@ -30,7 +30,7 @@ enum ResponseCode {
 }
 
 // 基础配置
-const BASE_URL =  process.env.BASE_URL;
+const BASE_URL = process.env.BASE_URL;
 
 const DEFAULT_TIMEOUT = 30000
 let token = Taro.getStorageSync('token') || ''
@@ -142,35 +142,35 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         url: '/pages/login/index'
                     })
                 }, 2000)
-                // throw new Error(message || '登录已过期')
+            // throw new Error(message || '登录已过期')
 
             case ResponseCode.FORBIDDEN:
                 Taro.showToast({
                     title: message || '没有权限访问',
                     icon: 'none'
                 })
-                // throw new Error(message || '没有权限访问')
+            // throw new Error(message || '没有权限访问')
 
             case ResponseCode.NOT_FOUND:
                 Taro.showToast({
                     title: message || '请求的资源不存在',
                     icon: 'none'
                 })
-                // throw new Error(message || '请求的资源不存在')
+            // throw new Error(message || '请求的资源不存在')
 
             case ResponseCode.INVALID_PARAMS:
                 Taro.showToast({
                     title: message || '参数错误',
                     icon: 'none'
                 })
-                // throw new Error(message || '参数错误')
+            // throw new Error(message || '参数错误')
 
             case ResponseCode.SERVER_ERROR:
                 Taro.showToast({
                     title: message || '服务器错误',
                     icon: 'none'
                 })
-                // throw new Error(message || '服务器错误')
+            // throw new Error(message || '服务器错误')
 
             default:
                 if (code !== ResponseCode.SUCCESS) {
@@ -238,7 +238,7 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
         try {
             // 调用刷新token接口
             const refreshResponse = await Taro.request({
-                url: `${BASE_URL}/auth/refresh`,
+                url: `${BASE_URL}/api/auth/refresh`,
                 method: 'POST',
                 data: { token: oldToken },
                 header: { 'Content-Type': 'application/json' }
