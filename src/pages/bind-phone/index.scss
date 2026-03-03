@@ -1,0 +1,199 @@
+/* 手机号授权页面样式 */
+.authorize-phone-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f8f8f5;
+  font-family: 'Spline Sans', 'Noto Sans', sans-serif;
+  color: #1a1a1a;
+}
+
+/* 顶部关闭按钮 */
+.close-btn {
+  display: flex;
+  align-items: center;
+  padding: 16rpx;
+  margin-bottom: 8rpx;
+}
+
+.close-icon {
+  display: flex;
+  width: 48rpx;
+  height: 48rpx;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.close-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 中间内容 */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24rpx;
+  justify-content: center;
+  
+}
+
+/* 应用信息 */
+.app-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  width: 100%;
+  justify-self: self-start;
+      margin-top: -100rpx;
+}
+
+.app-icon {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 32rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid rgba(0, 0, 0, 0.05);
+   width: 256rpx; /* w-32 */
+  height: 256rpx; /* h-32 */
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.app-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+/* 标题区域 */
+.header {
+  width: 100%;
+  max-width: 640rpx;
+  margin-top: 48rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 16rpx;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: 28rpx;
+  color: #666666;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 32rpx;
+}
+
+/* 手机图标 */
+.icon-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.1;
+  padding: 40rpx 0;
+}
+
+.phone-icon {
+  font-size: 480rpx;
+}
+
+/* 底部按钮区域 */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  width: 100%;
+  padding: 32rpx 32rpx 56rpx;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10rpx);
+  border-top-left-radius: 100rpx;
+  border-top-right-radius: 100rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  width: 100%;
+}
+
+/* 微信授权按钮 */
+.allow-btn {
+  display: flex;
+  width: 100%;
+  height: 112rpx;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  background: #07c160;
+  color: #ffffff;
+  border-radius: 56rpx;
+  box-shadow: 0 8rpx 16rpx rgba(7, 193, 96, 0.2);
+  transition: all 0.3s ease;
+}
+
+.allow-btn:hover {
+  filter: brightness(1.05);
+}
+
+.allow-btn:active {
+  transform: scale(0.98);
+}
+
+/* 微信图标 */
+.wechat-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.btn-text {
+  font-size: 28rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+/* 隐私政策 */
+.privacy {
+  padding: 0 16rpx;
+}
+
+.privacy-text {
+  font-size: 28rpx;
+  color: #666666;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.privacy-link {
+  color: #666666;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4rpx;
+}
+
+/* 禁用状态 */
+.allow-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.allow-btn:disabled:hover {
+  filter: none;
+  transform: none;
+}

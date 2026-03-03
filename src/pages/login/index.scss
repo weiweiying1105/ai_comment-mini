@@ -1,0 +1,84 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f7f7f8;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  margin-top: -160rpx; /* -mt-20 */
+}
+
+.branding {
+  width: 100%;
+  max-width: 700rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.logo {
+  width: 256rpx; /* w-32 */
+  height: 256rpx; /* h-32 */
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  // box-shadow: 0 24rpx 48rpx rgba(255, 212, 0, 0.2);
+  // border: 16rpx solid #fff;
+}
+
+.brand-text { display: flex; flex-direction: column; align-items: center; gap: 16rpx; }
+.title { font-size: 56rpx; font-weight: 700; color: #0f172a; text-align: center; }
+.subtitle { font-size: 28rpx; color: #64748b; text-align: center; line-height: 1.6; max-width: 520rpx; white-space: pre-line; }
+
+.action-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  width: 100%;
+  padding: 24rpx;
+  padding-bottom: 48rpx;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8rpx);
+  border-top-left-radius: 80rpx;
+  border-top-right-radius: 80rpx;
+  box-sizing: border-box;
+}
+
+.terms { display: flex; align-items: center; justify-content: center; gap: 20rpx; }
+.terms-checkbox {  width: 100%; height: 30rpx;gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;}
+.terms-text { font-size: 28rpx; color: #64748b; display: inline-block;height: 40rpx;line-height: 40px;}
+.link { color: #1f2937; font-weight: 600; text-decoration: underline; text-decoration-color: rgba(255,212,0,0.5); text-underline-offset: 4rpx; }
+
+.login-btn-wrap { display: flex; justify-content: center; width: 100%; margin-top: 16rpx; }
+.login-btn {
+  position: relative;
+  width: 100%;
+  max-width: 960rpx; /* ~480px */
+  height: 112rpx; /* h-14 */
+  padding: 0 40rpx;
+  border-radius: 9999rpx;
+  background: #ffd400;
+  color: #181811;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-shadow: 0 24rpx 48rpx rgba(255,212,0,0.3);
+  transition: transform 300ms ease, box-shadow 300ms ease, opacity 200ms ease;
+}
+.login-btn.disabled { opacity: 0.6; }
+.btn-icon { font-size: 48rpx; }
+.btn-text { font-size: 32rpx; font-weight: 700; letter-spacing: 1rpx; }
+
+.version { font-size: 22rpx; color: #94a3b8; text-align: center; opacity: 0.7; padding-top: 8rpx; }
