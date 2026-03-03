@@ -1,0 +1,78 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String        @id @default(cuid())
+  openId      String        @unique
+  unionId     String?       @unique
+  mobile      String?       @unique
+  nickName    String?
+  avatarUrl   String?
+  gender      Int?
+  city        String?
+  province    String?
+  country     String?
+  language    String?
+  currency    String        @default("CNY")
+  timezone    String        @default("Asia/Shanghai")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  lastLoginAt DateTime      @default(now())
+  comments    GoodComment[]
+
+  @@map("users")
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  parentId    Int?
+  keyword     String?
+  icon        String?
+  active_icon String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  use_count   Int           @default(0)
+  comments    GoodComment[] @relation("CategoryToComments")
+
+  @@index([parentId, id])
+  @@index([use_count, id])
+  @@index([keyword])
+}
+
+model GoodComment {
+  id               Int      @id @default(autoincrement())
+  commentId        Int      @default(autoincrement())
+  category         Int
+  categoryName     String
+  content          String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           String
+  limit            Int
+  isTemplate       Boolean  @default(false)
+  categoryCategory Category @relation("CategoryToComments", fields: [category], references: [id])
+  user             User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  key       String
+  bizType   String
+  ownerId   String?
+  bucket    String
+  createdAt DateTime @default(now())
+
+  @@index([bizType])
+  @@index([ownerId])
+}
