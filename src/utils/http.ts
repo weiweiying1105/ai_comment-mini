@@ -30,8 +30,8 @@ enum ResponseCode {
 }
 
 // 基础配置
-const BASE_URL =  (process as any).env.BASE_URL;
-console.log('@@@BASE_URL:', BASE_URL,(process as any).env.BASE_URL)
+const BASE_URL = (process as any).env.BASE_URL;
+console.log('@@@BASE_URL:', BASE_URL, (process as any).env.BASE_URL)
 const DEFAULT_TIMEOUT = 30000
 let token = Taro.getStorageSync('token') || ''
 // Token刷新状态管理
@@ -108,8 +108,8 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         // 处理业务状态码
         const apiResponse = data as ApiResponse
         const { code, message, data: responseData } = apiResponse
-        //  console.log('请求成功，返回apiResponse:', statusCode, 'code:', code, 'message:', message, 'data:', responseData)
-        
+        console.log('请求成功，返回apiResponse:', statusCode, 'code:', code, 'message:', message, 'data:', responseData)
+
         switch (code) {
             case ResponseCode.SUCCESS:
                 return responseData
@@ -133,7 +133,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         url: '/pages/login/index'
                     })
                 }, 2000)
-                // throw new Error(message || '登录已过期')
+            // throw new Error(message || '登录已过期')
 
             case ResponseCode.FORBIDDEN:
                 Taro.showToast({
@@ -141,7 +141,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-                // throw new Error(message || '没有权限访问')
+            // throw new Error(message || '没有权限访问')
 
             case ResponseCode.NOT_FOUND:
                 Taro.showToast({
@@ -149,7 +149,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-                // throw new Error(message || '请求的资源不存在')
+            // throw new Error(message || '请求的资源不存在')
 
             case ResponseCode.INVALID_PARAMS:
                 Taro.showToast({
@@ -157,7 +157,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-                // throw new Error(message || '参数错误')
+            // throw new Error(message || '参数错误')
 
             case ResponseCode.SERVER_ERROR:
                 Taro.showToast({
@@ -165,7 +165,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-                // throw new Error(message || '服务器错误')
+            // throw new Error(message || '服务器错误')
 
             default:
                 if (code !== ResponseCode.SUCCESS) {
@@ -236,7 +236,7 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
         try {
             // 调用刷新token接口
             const refreshResponse = await Taro.request({
-                url: `${BASE_URL}/auth/refresh`,
+                url: `${BASE_URL}/api/auth/refresh`,
                 method: 'POST',
                 data: { token: oldToken },
                 header: { 'Content-Type': 'application/json' }
