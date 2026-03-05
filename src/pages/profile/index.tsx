@@ -42,17 +42,17 @@ export default function ProfilePage() {
   const handleChooseAvatar = (e: any) => {
     const { avatarUrl } = e.detail
     console.log('选择头像:', avatarUrl)
-    
+
     // 先更新临时头像显示
     setUser(prev => ({
       ...prev,
       avatarUrl
     }))
-    
+
     // 上传头像到服务器获取永久地址
     uploadAvatarToServer(avatarUrl).then((permanentAvatarUrl) => {
       console.log('永久头像地址:', permanentAvatarUrl)
-    
+
       // 使用函数形式的setState确保获取最新状态
       setUser(prevState => {
         const updatedUser = {
@@ -65,13 +65,13 @@ export default function ProfilePage() {
       })
     })
   }
-  
+
   // 上传头像到服务器
   const uploadAvatarToServer = async (tempAvatarUrl: string) => {
     try {
       setLoading(true)
       Taro.showLoading({ title: '上传头像中...' })
-      
+
       const uploadResult = await new Promise<string>((resolve, reject) => {
         Taro.uploadFile({
           url: `${process.env.BASE_URL || 'http://localhost:3000'}/api/upload`,
@@ -100,7 +100,7 @@ export default function ProfilePage() {
           }
         });
       });
-      
+
       // 更新头像URL
       setUser(prev => {
         // 更新本地存储
@@ -117,7 +117,7 @@ export default function ProfilePage() {
         title: '头像上传成功',
         icon: 'success'
       });
-      
+
       Taro.hideLoading()
       return uploadResult;
     } catch (error) {
@@ -131,7 +131,7 @@ export default function ProfilePage() {
       setLoading(false)
     }
   }
-  
+
   // 输入昵称
   const handleNicknameInput = (e: any) => {
     const nickName = e.detail.value
@@ -148,13 +148,13 @@ export default function ProfilePage() {
   }
 
   // 保存用户信息
-  const handleSaveUser =async (data?: UserInfo) => {
+  const handleSaveUser = async (data?: UserInfo) => {
     // 使用传入的数据或当前状态
     const currentUser = data || user
-    
+
     // 更新本地存储的用户信息
     const savedUser = Taro.getStorageSync('USER_INFO') || {}
-    if (currentUser.nickName) { 
+    if (currentUser.nickName) {
       savedUser.nickName = currentUser.nickName
     }
     if (currentUser.avatarUrl) {
@@ -163,8 +163,8 @@ export default function ProfilePage() {
     const updatedUser = {
       ...currentUser
     }
-   const res = await httpPut('/api/user/info', updatedUser)
-    console.log('更新用户信息成功:',res)
+    const res = await httpPut('/api/user/info', updatedUser)
+    console.log('更新用户信息成功:', res)
     Taro.setStorageSync('USER_INFO', updatedUser)
 
     Taro.showToast({
@@ -173,9 +173,9 @@ export default function ProfilePage() {
     })
     // 重新获取用户信息
     const updatedUserInfo = await httpGet('/api/user/info')
-  
+
     setUser(updatedUserInfo)
-  
+
   }
 
   // 建议/反馈
@@ -212,7 +212,7 @@ export default function ProfilePage() {
             onChooseAvatar={handleChooseAvatar}
             disabled={loading}
           >
-            {user.avatarUrl ? (
+            {user && user?.avatarUrl ? (
               <Image
                 className='avatar'
                 src={user.avatarUrl}
@@ -229,7 +229,7 @@ export default function ProfilePage() {
           </View>
         </View>
         <View className='profile-info'>
-         <Input
+          <Input
             className='profile-name'
             type='nickname'
             placeholder='请输入昵称'

@@ -65,7 +65,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     res.code
                 )
                 // console.log('登录成功，获取到token:', loginRes.token)
-                if (loginRes.token) {
+                if (loginRes && loginRes?.token) {
                     token = loginRes.token
                     Taro.setStorageSync('token', loginRes.token)
                     // 获取到token后，更新请求头并继续发起请求

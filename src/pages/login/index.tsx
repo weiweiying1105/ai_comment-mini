@@ -38,7 +38,7 @@ export default function LoginPage() {
   // 微信登录（不获取用户信息）
   const handleWxLogin = async () => {
     if (loading) return;
-    if(!agree) {
+    if (!agree) {
       Taro.showToast({
         title: '请先同意用户协议',
         icon: 'none',
@@ -61,7 +61,7 @@ export default function LoginPage() {
       const response = await callLoginApi(loginRes.code)
 
       // 3. 保存登录信息
-      if (response.token) {
+      if (response && response.token) {
         Taro.setStorageSync('token', response.token)
         Taro.setStorageSync('userInfo', {
           openid: response.openid,
@@ -99,7 +99,7 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
-   const WXNAME = 'AI帮你想好评'
+  const WXNAME = 'AI帮你想好评'
   return (
     <View className='login-page'>
       {/* Main Content Area */}
