@@ -25,7 +25,6 @@ const ProCreatePage = () => {
   const [loading, setLoading] = useState(false)
   const [dishes, setDishes] = useState<string[]>([])
   const [analyzing, setAnalyzing] = useState(false)
-  const TOKEN = Taro.getStorageSync('token')
 
   const handleUpload = async () => {
     const user = await ensureUserReady({ needPhone: false })
@@ -43,8 +42,6 @@ const ProCreatePage = () => {
         const tempFilePath = res.tempFilePaths[0]
         console.log('临时文件路径:', tempFilePath)
 
-      
-
         Taro.showLoading({ title: '分析中...', mask: true })
 
         // 直接调用新的API，同时进行识别和上传
@@ -56,7 +53,7 @@ const ProCreatePage = () => {
             keyword: keyword
           },
           header: {
-            'Authorization': `Bearer ${TOKEN}`
+            'Authorization': `Bearer ${Taro.getStorageSync('token')}`
           }
         })
 

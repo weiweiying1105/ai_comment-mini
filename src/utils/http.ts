@@ -33,7 +33,6 @@ enum ResponseCode {
 const BASE_URL = (process as any).env.BASE_URL;
 console.log('@@@BASE_URL:', BASE_URL, (process as any).env.BASE_URL)
 const DEFAULT_TIMEOUT = 30000
-let token = Taro.getStorageSync('token') || ''
 // Token刷新状态管理
 let isRefreshing = false; // 是否正在刷新token
 let refreshFailed = false; // 是否刷新token失败
@@ -42,11 +41,12 @@ let requestQueue: Array<() => void> = [];// 刷新token后重新请求的队列
 // 封装的请求函数
 const request = async <T = any>(config: RequestConfig): Promise<T> => {
     // 如果刷新token失败，直接拒绝
-    if (refreshFailed) {
-        // throw new Error('Token刷新失败')
+    if (false) {
+        // 占位：历史 refreshFailed 逻辑保留在下方，不在此提前返回
     }
-    // 动态获取最新的token
 
+    // 每次请求动态读取最新 token，避免跨页后内存中的旧值
+    let token = Taro.getStorageSync('token') || ''
 
     const header: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -60,15 +60,12 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         try {
             const res = await Taro.login()
             if (res.code) {
-                // console.log('登录成功，获取到code:', res.code)
                 const loginRes = await callLoginApi(
                     res.code
                 )
-                // console.log('登录成功，获取到token:', loginRes.token)
                 if (loginRes && loginRes?.token) {
                     token = loginRes.token
                     Taro.setStorageSync('token', loginRes.token)
-                    // 获取到token后，更新请求头并继续发起请求
                     header.Authorization = `Bearer ${token}`
                 }
             }
@@ -95,14 +92,13 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         Taro.hideLoading()
 
         const { statusCode, data } = response
-        // console.log('请求成功，返回response:', statusCode, 'data:', data)
         // 处理HTTP状态码
         if (statusCode === 401) {
             return handleTokenRefresh(config)
         }
 
         if (statusCode !== 200) {
-            // throw new Error(`HTTP ${statusCode}: 请求失败`)
+            // 非 200 的 HTTP 状态，这里保留提示/日志
         }
 
         // 处理业务状态码
@@ -119,7 +115,6 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
 
             case ResponseCode.UNAUTHORIZED:// 未授权，清除本地存储并跳转到登录页
             case ResponseCode.USER_NOT_FOUND:// 用户不存在，清除本地存储并跳转到登录页
-                // token过期或未授权或用户不存在，清除本地存储并跳转到登录页
                 Taro.removeStorageSync('token')
                 Taro.removeStorageSync('userInfo')
                 refreshFailed = true; // 标记刷新失败
@@ -133,7 +128,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         url: '/pages/login/index'
                     })
                 }, 2000)
-            // throw new Error(message || '登录已过期')
+            // no break
 
             case ResponseCode.FORBIDDEN:
                 Taro.showToast({
@@ -141,7 +136,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-            // throw new Error(message || '没有权限访问')
+            // no break
 
             case ResponseCode.NOT_FOUND:
                 Taro.showToast({
@@ -149,7 +144,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-            // throw new Error(message || '请求的资源不存在')
+            // no break
 
             case ResponseCode.INVALID_PARAMS:
                 Taro.showToast({
@@ -157,7 +152,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-            // throw new Error(message || '参数错误')
+            // no break
 
             case ResponseCode.SERVER_ERROR:
                 Taro.showToast({
@@ -165,7 +160,7 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                     icon: 'none',
                     duration: 2000
                 })
-            // throw new Error(message || '服务器错误')
+            // no break
 
             default:
                 if (code !== ResponseCode.SUCCESS) {
@@ -175,7 +170,6 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         icon: 'none',
                         duration: 2000
                     })
-                    // throw new Error(message || '请求失败')
                 }
                 return responseData
         }
@@ -199,21 +193,19 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
 const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Promise<T> => {
     console.log('进入handleTokenRefresh函数')
 
-    // 如果刷新token失败，直接拒绝请求
     if (refreshFailed) {
         console.log('refreshFailed为true，直接拒绝请求')
-        // throw new Error('登录已过期，请重新登录')
+        redirectToLogin()
+        return Promise.reject(new Error('登录已过期')) as any
     }
 
     const oldToken = Taro.getStorageSync('token')
     console.log('获取到的oldToken:', oldToken)
 
     if (!oldToken) {
-        // 没有token，跳转登录
         console.log('没有oldToken，跳转登录页')
-        // debugger
         redirectToLogin()
-        // throw new Error('请先登录')
+        return Promise.reject(new Error('未登录')) as any
     }
 
     console.log('当前isRefreshing状态:', isRefreshing)
@@ -221,9 +213,7 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
 
     if (isRefreshing) {
         console.log('isRefreshing为true，将请求加入队列')
-        return new Promise<T>((resolve, reject) => {
-            console.log('刷新token中...，当前队列:', requestQueue)
-            // debugger;
+        return new Promise<T>((resolve) => {
             requestQueue.push(() => {
                 console.log('队列中的请求开始执行')
                 resolve(request(originalRequest))
@@ -234,23 +224,22 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
         isRefreshing = true
 
         try {
-            // 调用刷新token接口
             const refreshResponse = await Taro.request({
                 url: `${BASE_URL}/api/auth/refresh`,
                 method: 'POST',
-                data: { token: oldToken },
-                header: { 'Content-Type': 'application/json' }
+                data: {},
+                header: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${oldToken}`
+                }
             })
 
-            if (refreshResponse.statusCode === 200) {
+            if (refreshResponse.statusCode === 200 && refreshResponse.data?.data?.token) {
                 const newToken = refreshResponse.data.data.token
                 Taro.setStorageSync('token', newToken);
-                // debugger;
                 refreshFailed = false; // 刷新成功，重置失败标记
-                // 重新发送队列中的所有请求
                 requestQueue.forEach(callback => callback())
                 requestQueue = [] // 清空队列
-                // 重新发送原始请求
                 const newConfig = {
                     ...originalRequest,
                     header: {
@@ -260,19 +249,21 @@ const handleTokenRefresh = async <T = any>(originalRequest: RequestConfig): Prom
                 }
                 return request(newConfig)
             } else {
-                // throw new Error('刷新token失败')
+                Taro.showToast({
+                    title: '刷新token失败',
+                    icon: 'none'
+                })
+                return Promise.reject(new Error('刷新token失败')) as any
             }
         } catch (refreshError) {
-            // 刷新失败，清除本地数据并跳转登录
             Taro.removeStorageSync('token')
             Taro.removeStorageSync('userInfo')
             refreshFailed = true; // 标记刷新失败
-            requestQueue.forEach(callback => callback()) // // 执行队列中的请求，但它们会因为refreshFailed为true而失败
-            requestQueue = [] // 清空队列
+            requestQueue.forEach(callback => callback())
+            requestQueue = []
             redirectToLogin()
             throw refreshError
         } finally {
-            // 无论成功失败，都重置刷新状态
             isRefreshing = false
             console.log('finally块执行，重置isRefreshing为false')
         }
