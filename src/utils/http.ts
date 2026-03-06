@@ -98,7 +98,14 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
         }
 
         if (statusCode !== 200) {
-            // 非 200 的 HTTP 状态，这里保留提示/日志
+            // 非 200 的 HTTP 状态，显示错误信息
+            const errorMessage = `HTTP错误: ${statusCode}`
+            Taro.showToast({
+                title: errorMessage,
+                icon: 'none',
+                duration: 2000
+            })
+            throw new Error(errorMessage)
         }
 
         // 处理业务状态码
@@ -118,8 +125,9 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                 Taro.removeStorageSync('token')
                 Taro.removeStorageSync('userInfo')
                 refreshFailed = true; // 标记刷新失败
+                const authErrorMsg = message || '登录已过期，请重新登录'
                 Taro.showToast({
-                    title: message || '登录已过期，请重新登录',
+                    title: authErrorMsg,
                     icon: 'none',
                     duration: 2000
                 })
@@ -128,48 +136,54 @@ const request = async <T = any>(config: RequestConfig): Promise<T> => {
                         url: '/pages/login/index'
                     })
                 }, 2000)
-            // no break
+                throw new Error(authErrorMsg)
 
             case ResponseCode.FORBIDDEN:
+                const forbiddenMsg = message || '没有权限访问'
                 Taro.showToast({
-                    title: message || '没有权限访问',
+                    title: forbiddenMsg,
                     icon: 'none',
                     duration: 2000
                 })
-            // no break
+                throw new Error(forbiddenMsg)
 
             case ResponseCode.NOT_FOUND:
+                const notFoundMsg = message || '请求的资源不存在'
                 Taro.showToast({
-                    title: message || '请求的资源不存在',
+                    title: notFoundMsg,
                     icon: 'none',
                     duration: 2000
                 })
-            // no break
+                throw new Error(notFoundMsg)
 
             case ResponseCode.INVALID_PARAMS:
+                const paramsErrorMsg = message || '参数错误'
                 Taro.showToast({
-                    title: message || '参数错误',
+                    title: paramsErrorMsg,
                     icon: 'none',
                     duration: 2000
                 })
-            // no break
+                throw new Error(paramsErrorMsg)
 
             case ResponseCode.SERVER_ERROR:
+                const serverErrorMsg = message || '服务器错误'
                 Taro.showToast({
-                    title: message || '服务器错误',
+                    title: serverErrorMsg,
                     icon: 'none',
                     duration: 2000
                 })
-            // no break
+                throw new Error(serverErrorMsg)
 
             default:
                 if (code !== ResponseCode.SUCCESS) {
                     console.log('其他业务状态码:', code, 'message:', message)
+                    const defaultErrorMsg = message || '请求失败'
                     Taro.showToast({
-                        title: message || '请求失败',
+                        title: defaultErrorMsg,
                         icon: 'none',
                         duration: 2000
                     })
+                    throw new Error(defaultErrorMsg)
                 }
                 return responseData
         }

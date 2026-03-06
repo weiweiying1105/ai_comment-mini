@@ -5,6 +5,13 @@ import './index.scss'
 import { callLoginApi } from '@/api'
 import { EVENT_NAMES, eventBus } from '@/utils/eventBus'
 const LOGO_URL = 'https://6169-ai-accounting-5gprth66e60400be-1303796882.cos.ap-shanghai.myqcloud.com/ai-comment/ChatGPT%20Image%202026%E5%B9%B41%E6%9C%8821%E6%97%A5%2016_01_16.png'
+type IAppOption = {
+    globalData: {
+        token?: string
+        userInfo?: any
+        lastUserInfoCheckTime?: number
+    }
+}
 export default function LoginPage() {
   const [agree, setAgree] = useState(false)
 
@@ -37,6 +44,7 @@ export default function LoginPage() {
 
   // 微信登录（不获取用户信息）
   const handleWxLogin = async () => {
+    const app = Taro.getApp<IAppOption>()
     if (loading) return;
     if (!agree) {
       Taro.showToast({
@@ -63,6 +71,7 @@ export default function LoginPage() {
       // 3. 保存登录信息
       if (response && response.token) {
         Taro.setStorageSync('token', response.token)
+        app.globalData.token = response.token
         Taro.setStorageSync('userInfo', {
           openid: response.openid,
           ...response.userInfo

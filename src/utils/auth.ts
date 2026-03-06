@@ -6,6 +6,7 @@ interface EnsureOptions {
 }
 type IAppOption = {
     globalData: {
+        token?: string
         userInfo?: any
         lastUserInfoCheckTime?: number
     }
@@ -72,14 +73,24 @@ export function getUserInfoCached() {
  * 统一在关键功能前调用。
  */
 export async function ensureUserReady(options: EnsureOptions = {}) {
-    const { needPhone = false, revalidateInterval = 5 * 60 * 1000 } = options
+    const app = Taro.getApp<IAppOption>()
 
+    const { needPhone = false, revalidateInterval = 5 * 60 * 1000 } = options
+    
     // 1. 从内存 / 缓存中拿当前状态
     let { userInfo, lastUserInfoCheckTime } = getUserInfoCached()
-    console.log('ensureUserReady', userInfo, lastUserInfoCheckTime)
+
+    console.log('11ensureUserReady',getUserInfoCached(), userInfo, lastUserInfoCheckTime)
 
     // 2. 动态读取 Storage 中的 token，避免模块常量造成的误判
-    const token = Taro.getStorageSync('token')
+    const token = Taro.getStorageSync('token') || app.globalData.token
+    console.log('token', token, getCurrentPageUrl())
+    
+    // 检查是否已经在登录页
+    if (getCurrentPageUrl() === '/pages/login/index') {
+        return null
+    }
+    
     if (!token) {
         Taro.navigateTo({
             url: '/pages/login/index?redirect=' + encodeURIComponent(getCurrentPageUrl()),
@@ -96,18 +107,33 @@ export async function ensureUserReady(options: EnsureOptions = {}) {
     }
 
     try {
+        // 显示加载提示
+        Taro.showLoading({
+            title: '加载中...',
+            mask: true
+        })
+        
         const res = await httpGet('/api/user/info')
+        
+        // 隐藏加载提示
+        Taro.hideLoading()
+        
         setUserInfo(res)
         userInfo = res
 
-        if (res.statusCode === 401) {
-            Taro.navigateTo({
-                url: '/pages/login/index?redirect=' + encodeURIComponent(getCurrentPageUrl()),
-            })
-            return null
-        }
-    } catch (e) {
+        // 注意：httpGet 已经处理了 401 错误，会自动跳转到登录页
+        // 这里不需要再处理 401 错误
+    } catch (e: any) {
+        // 隐藏加载提示
+        Taro.hideLoading()
         console.warn('校验用户信息失败：', e)
+        // 使用实际的错误信息
+        const errorMessage = e?.message || '获取用户信息失败'
+        Taro.showToast({
+            title: errorMessage,
+            icon: 'none',
+            duration: 2000
+        })
     }
 
     return userInfo
