@@ -22,9 +22,36 @@
     ],
     "paths": {
       // TS5090 leading './'
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["./src", "typings", "./config"],
-  "compileOnSave": false
+  "include": [
+    "./src",
+    "typings",
+    "./config",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules"
+  ]
 }
