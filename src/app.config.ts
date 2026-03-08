@@ -1,15 +1,19 @@
 export default defineAppConfig({
   pages: [
+    // 主包仅保留 TabBar 页（小程序要求 TabBar 只能在主包）
     'pages/index/index',
-    'pages/profile/index',
-    'pages/allCategory/index',
-    'pages/login/index',
-    "pages/privacy-policy/index",
-    "pages/user-agreement/index",
-    "pages/records/index",
-    "pages/templates/index",
-    "pages/proCreate/index",
-    "pages/bind-phone/index",
+    'pages/proCreate/index',
+    'pages/profile/index'
+  ],
+  // 分包配置：非 TabBar 页移动到分包，减小主包体积
+  subPackages: [
+    { root: 'pages/login', pages: ['index'] },
+    { root: 'pages/allCategory', pages: ['index'] },
+    { root: 'pages/templates', pages: ['index'] },
+    { root: 'pages/records', pages: ['index'] },
+    { root: 'pages/privacy-policy', pages: ['index'] },
+    { root: 'pages/user-agreement', pages: ['index'] },
+    { root: 'pages/bind-phone', pages: ['index'] },
   ],
   tabBar: {
     color: '#4B5563',           // 未选中项文字颜色
@@ -43,7 +47,5 @@ export default defineAppConfig({
     navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black',
-
-
   }
 })
