@@ -108,7 +108,7 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
-  const WXNAME = 'AI帮你想好评'
+  const WXNAME = '好评生成器'
   return (
     <View className='login-page'>
       {/* Main Content Area */}

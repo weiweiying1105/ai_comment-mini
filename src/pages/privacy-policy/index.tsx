@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import './index.less'
 
 const PrivacyPolicy: React.FC = () => {
-  const WXNAME = 'AI帮你想好评'
+  const WXNAME = '好评生成器'
   return (
     <View className='policy-container'>
       <ScrollView className='policy-content'>

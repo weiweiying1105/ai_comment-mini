@@ -2,7 +2,7 @@
   "name": "mini-taro",
   "version": "1.0.0",
   "private": true,
-  "description": "ai生成大众点评好评",
+  "description": "大众点评好评生成器",
   "templateInfo": {
     "name": "default",
     "typescript": true,
